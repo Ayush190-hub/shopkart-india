@@ -3,229 +3,913 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ShopKart India — Admin Panel</title>
+<title>ShopKart India — India ka Apna Store</title>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--or:#FF6B00;--gr:#1BAB5E;--dk:#1A1A2E;--md:#4A4A6A;--lt:#F7F5FF;--wh:#FFFFFF;--bd:#E8E4F0;--grp:#E8F9F0;--orp:#FFF3E8;}
+:root{--or:#FF6B00;--orl:#FF8C33;--orp:#FFF3E8;--gr:#1BAB5E;--grp:#E8F9F0;--dk:#1A1A2E;--md:#4A4A6A;--lt:#F7F5FF;--wh:#FFFFFF;--bd:#E8E4F0;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Nunito',sans-serif;background:var(--lt);color:var(--dk);}
-.lock{position:fixed;inset:0;background:var(--dk);display:flex;align-items:center;justify-content:center;z-index:999;}
-.lockbox{background:var(--wh);border-radius:16px;padding:32px;width:320px;text-align:center;}
-.lockbox h2{font-family:'Baloo 2',cursive;font-size:22px;color:var(--or);margin-bottom:6px;}
-.lockbox p{font-size:13px;color:var(--md);margin-bottom:20px;}
-.lockbox input{width:100%;border:1.5px solid var(--bd);border-radius:9px;padding:11px;font-size:16px;text-align:center;letter-spacing:4px;font-family:'Nunito',sans-serif;outline:none;margin-bottom:12px;}
-.lockbox input:focus{border-color:var(--or);}
-.lockbox button{width:100%;background:var(--or);color:white;border:none;border-radius:9px;padding:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
-nav{background:var(--wh);border-bottom:1.5px solid var(--bd);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:var(--or);}
+body{font-family:'Nunito',sans-serif;background:var(--lt);color:var(--dk);overflow-x:hidden;}
+nav{background:var(--wh);border-bottom:1.5px solid var(--bd);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:200;}
+.logo{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:var(--or);text-decoration:none;display:flex;align-items:center;gap:6px;cursor:pointer;}
+.logo-box{width:30px;height:30px;background:var(--or);border-radius:7px;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;}
 .logo span{color:var(--dk);}
-.abadge{background:#FAEEDA;color:#633806;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700;}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:20px;max-width:1000px;margin:0 auto;}
-.stat{background:var(--wh);border:1.5px solid var(--bd);border-radius:12px;padding:16px;text-align:center;}
-.stat-num{font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;color:var(--dk);}
-.stat-lbl{font-size:12px;color:var(--md);margin-top:2px;}
-.main{max-width:1000px;margin:0 auto;padding:0 20px 40px;}
-.section-title{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.orders{display:flex;flex-direction:column;gap:10px;}
-.ocard{background:var(--wh);border:1.5px solid var(--bd);border-radius:12px;padding:16px;}
-.ocard.new{border-color:var(--or);background:#FFFAF7;}
-.ocard.processing{border-color:#3B82F6;}
-.ocard.shipped{border-color:var(--gr);}
-.ohd{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
-.oid{font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;}
-.ostatus{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700;}
-.s-new{background:#FFF3E8;color:#854F0B;}
-.s-proc{background:#EFF6FF;color:#1D4ED8;}
-.s-ship{background:var(--grp);color:#065F46;}
-.s-del{background:#F0FDF4;color:#166534;}
-.otime{font-size:12px;color:var(--md);margin-left:auto;}
-.odetails{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
-.od{background:var(--lt);border-radius:8px;padding:10px;}
-.odl{font-size:11px;color:var(--md);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
-.odv{font-size:13px;font-weight:700;color:var(--dk);}
-.oactions{display:flex;gap:8px;flex-wrap:wrap;}
-.obtn{padding:8px 14px;border-radius:8px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:none;}
-.obtn-wa{background:#25D366;color:white;}
-.obtn-buy{background:var(--or);color:white;}
-.obtn-proc{background:#3B82F6;color:white;}
-.obtn-ship{background:var(--gr);color:white;}
-.obtn-del{background:var(--dk);color:white;}
-.empty{text-align:center;padding:60px 20px;color:var(--md);}
-.empty-icon{font-size:48px;margin-bottom:12px;}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dk);color:white;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;transition:transform 0.3s;white-space:nowrap;}
+.srch{flex:1;max-width:460px;margin:0 16px;display:flex;border:1.5px solid var(--bd);border-radius:10px;overflow:hidden;background:var(--lt);}
+.srch input{flex:1;border:none;background:transparent;padding:9px 14px;font-family:'Nunito',sans-serif;font-size:14px;outline:none;}
+.srch button{background:var(--or);border:none;padding:0 16px;cursor:pointer;color:white;font-size:15px;}
+.nav-r{display:flex;align-items:center;gap:10px;}
+.nbtn{background:none;border:1.5px solid var(--bd);border-radius:9px;padding:7px 13px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;color:var(--md);cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;white-space:nowrap;}
+.nbtn:hover{border-color:var(--or);color:var(--or);}
+.cbtn{background:var(--or);color:white;border-color:var(--or);position:relative;}
+.cbtn:hover{background:var(--orl);}
+.cc{position:absolute;top:-6px;right:-6px;background:var(--gr);color:white;font-size:10px;font-weight:700;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;}
+.catbar{background:var(--wh);border-bottom:1px solid var(--bd);padding:0 20px;display:flex;gap:4px;overflow-x:auto;}
+.catbar::-webkit-scrollbar{display:none;}
+.cpill{white-space:nowrap;padding:10px 16px;font-size:13px;font-weight:600;color:var(--md);cursor:pointer;border-bottom:2.5px solid transparent;transition:all 0.2s;}
+.cpill:hover,.cpill.on{color:var(--or);border-bottom-color:var(--or);}
+.sbanner{background:linear-gradient(90deg,#1A1A2E,#2D1B69,#1A1A2E);padding:9px 20px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;}
+.sbadge{background:var(--or);color:white;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.7;}}
+.stxt{color:white;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.scd{display:flex;gap:5px;align-items:center;}
+.scb{background:rgba(255,255,255,.15);color:white;font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;padding:4px 9px;border-radius:6px;min-width:34px;text-align:center;}
+.scs{color:rgba(255,255,255,.6);font-weight:700;}
+.hero{background:linear-gradient(135deg,#FF6B00,#FF4500,#c73600);padding:44px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:280px;height:280px;background:rgba(255,255,255,.06);border-radius:50%;}
+.htxt{position:relative;z-index:1;}
+.hbadge{display:inline-block;background:rgba(255,255,255,.2);color:white;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:10px;}
+.hero h1{font-family:'Baloo 2',cursive;font-size:40px;font-weight:800;color:white;line-height:1.1;margin-bottom:10px;}
+.hero p{color:rgba(255,255,255,.85);font-size:15px;margin-bottom:20px;}
+.hcta{display:inline-flex;align-items:center;gap:7px;background:white;color:var(--or);font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;padding:11px 24px;border-radius:10px;border:none;cursor:pointer;text-decoration:none;}
+.htags{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+.htag{background:rgba(255,255,255,.15);color:white;padding:5px 12px;border-radius:7px;font-size:12px;font-weight:600;}
+.hvis{position:relative;z-index:1;background:rgba(255,255,255,.12);border-radius:18px;padding:24px 28px;text-align:center;min-width:180px;}
+.bnum{font-family:'Baloo 2',cursive;font-size:48px;font-weight:800;color:white;line-height:1;}
+.blbl{color:rgba(255,255,255,.8);font-size:12px;margin-top:3px;}
+.trust{background:var(--wh);border-bottom:1px solid var(--bd);display:flex;justify-content:center;gap:28px;padding:12px 20px;flex-wrap:wrap;}
+.ti{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--md);}
+.tico{width:26px;height:26px;background:var(--orp);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.sec{padding:28px 20px;max-width:1200px;margin:0 auto;}
+.sechd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.sectit{font-family:'Baloo 2',cursive;font-size:21px;font-weight:800;color:var(--dk);display:flex;align-items:center;gap:7px;}
+.seeall{font-size:13px;font-weight:700;color:var(--or);cursor:pointer;}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+.pcard{background:var(--wh);border:1.5px solid var(--bd);border-radius:13px;overflow:hidden;cursor:pointer;transition:all 0.2s;position:relative;}
+.pcard:hover{transform:translateY(-4px);box-shadow:0 6px 24px rgba(26,26,46,.1);border-color:var(--or);}
+.pbadge{position:absolute;top:9px;left:9px;background:var(--or);color:white;font-size:10px;font-weight:700;padding:3px 7px;border-radius:5px;z-index:1;}
+.pbadge.aff{background:var(--gr);}
+.pimg{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:70px;background:var(--lt);position:relative;overflow:hidden;}
+.pimg img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.pinf{padding:11px;}
+.pname{font-size:13px;font-weight:700;color:var(--dk);margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:36px;}
+.psrc{font-size:11px;color:var(--md);margin-bottom:7px;}
+.psrc.amazon{color:#E47911;}
+.psrc.flipkart{color:#2874F0;}
+.psrc.deodap{color:var(--or);}
+.prow{display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.pprice{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;color:var(--dk);}
+.pmrp{font-size:11px;color:var(--md);text-decoration:line-through;}
+.pdisc{font-size:11px;font-weight:700;color:var(--gr);}
+.abtn{background:var(--or);color:white;border:none;border-radius:7px;padding:7px 12px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:background 0.2s;white-space:nowrap;}
+.abtn:hover{background:var(--orl);}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;}
+.ccard{background:var(--wh);border:1.5px solid var(--bd);border-radius:13px;padding:18px 10px;text-align:center;cursor:pointer;transition:all 0.2s;}
+.ccard:hover{border-color:var(--or);transform:translateY(-3px);}
+.cemoji{font-size:30px;margin-bottom:7px;}
+.cname{font-size:12px;font-weight:700;color:var(--dk);}
+/* CART */
+.cov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:400;}
+.cov.on{display:block;}
+.csb{position:fixed;top:0;right:-400px;width:370px;height:100vh;background:var(--wh);z-index:401;display:flex;flex-direction:column;transition:right 0.3s;}
+.csb.on{right:0;}
+.cshd{padding:18px;border-bottom:1.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
+.cshd h2{font-family:'Baloo 2',cursive;font-size:19px;font-weight:800;}
+.xbtn{background:var(--lt);border:none;border-radius:7px;width:30px;height:30px;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;}
+.citems{flex:1;overflow-y:auto;padding:14px;}
+.cemp{text-align:center;padding:50px 20px;color:var(--md);}
+.citem{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--bd);}
+.cii{width:52px;height:52px;background:var(--lt);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden;}
+.cii img{width:100%;height:100%;object-fit:cover;}
+.cin{flex:1;}
+.cinm{font-size:13px;font-weight:700;margin-bottom:3px;}
+.cipr{font-size:13px;font-weight:800;color:var(--or);}
+.cqty{display:flex;align-items:center;gap:7px;margin-top:5px;}
+.qb{background:var(--lt);border:1px solid var(--bd);border-radius:5px;width:24px;height:24px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;font-weight:700;}
+.qn{font-size:13px;font-weight:700;min-width:18px;text-align:center;}
+.cft{padding:14px 18px;border-top:1.5px solid var(--bd);}
+.ctot{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.ctotl{font-size:14px;color:var(--md);font-weight:600;}
+.ctotv{font-family:'Baloo 2',cursive;font-size:21px;font-weight:800;}
+.ckbtn{width:100%;background:var(--or);color:white;border:none;border-radius:9px;padding:13px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+.ckbtn:hover{background:var(--orl);}
+/* PAGES */
+.page{display:none;position:fixed;inset:0;background:var(--lt);z-index:600;overflow-y:auto;}
+.page.on{display:block;}
+.pgnav{background:var(--wh);border-bottom:1.5px solid var(--bd);padding:0 20px;height:54px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10;}
+.bbtn{background:none;border:1.5px solid var(--bd);border-radius:7px;padding:6px 13px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;color:var(--md);cursor:pointer;}
+.bbtn:hover{border-color:var(--or);color:var(--or);}
+.pgtit{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;}
+/* PRODUCT DETAIL */
+.pdw{max-width:860px;margin:0 auto;padding:22px;}
+.pdg{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;}
+.pdimg{background:var(--wh);border-radius:18px;border:1.5px solid var(--bd);aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:110px;overflow:hidden;position:relative;}
+.pdimg img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.pdsb{display:inline-flex;font-size:12px;font-weight:700;padding:4px 11px;border-radius:20px;margin-bottom:10px;}
+.pdsb.amazon{background:#FEF3E2;color:#E47911;}
+.pdsb.flipkart{background:#E8EFFE;color:#2874F0;}
+.pdsb.deodap{background:var(--orp);color:var(--or);}
+.pdname{font-family:'Baloo 2',cursive;font-size:24px;font-weight:800;line-height:1.2;margin-bottom:10px;}
+.pdrat{display:flex;align-items:center;gap:7px;margin-bottom:14px;}
+.pdstars{color:#FF9500;font-size:15px;}
+.pdrc{font-size:13px;color:var(--md);}
+.pdpr{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+.pdprice{font-family:'Baloo 2',cursive;font-size:34px;font-weight:800;}
+.pdmrp{font-size:17px;color:var(--md);text-decoration:line-through;}
+.pddtag{background:var(--grp);color:var(--gr);font-size:13px;font-weight:700;padding:4px 10px;border-radius:7px;}
+.pdsav{font-size:13px;color:var(--gr);font-weight:600;margin-bottom:16px;}
+.pdlbl{font-size:12px;font-weight:700;color:var(--md);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;margin-top:14px;}
+.pddesc{font-size:14px;color:var(--md);line-height:1.7;margin-bottom:14px;}
+.pdfeat{list-style:none;margin-bottom:18px;}
+.pdfeat li{font-size:13px;color:var(--dk);padding:4px 0;display:flex;align-items:center;gap:7px;}
+.pdfeat li::before{content:'✓';color:var(--gr);font-weight:700;}
+.pdacts{display:flex;gap:10px;flex-wrap:wrap;}
+.pdadd{flex:1;background:var(--or);color:white;border:none;border-radius:11px;padding:13px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;min-width:130px;}
+.pdadd:hover{background:var(--orl);}
+.pdwish{background:var(--wh);color:var(--dk);border:1.5px solid var(--bd);border-radius:11px;padding:13px 17px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+.pddel{background:var(--grp);border-radius:9px;padding:11px 14px;margin-top:14px;font-size:13px;}
+.revs{margin-top:28px;}
+.rcard{background:var(--wh);border:1.5px solid var(--bd);border-radius:11px;padding:14px;margin-bottom:10px;}
+.rhd{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.rav{width:34px;height:34px;border-radius:50%;background:var(--orp);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--or);flex-shrink:0;}
+.rnm{font-size:14px;font-weight:700;}
+.rdt{font-size:11px;color:var(--md);margin-left:auto;}
+.rst{color:#FF9500;font-size:13px;margin-bottom:5px;}
+.rtxt{font-size:13px;color:var(--md);line-height:1.6;}
+/* CHECKOUT FORM */
+.chkw{max-width:600px;margin:0 auto;padding:22px;}
+.chkcard{background:var(--wh);border:1.5px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+.chkch{background:var(--lt);padding:12px 18px;font-size:13px;font-weight:700;color:var(--md);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--bd);}
+.chkcb{padding:16px 18px;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.frow.full{grid-template-columns:1fr;}
+.ff label{display:block;font-size:12px;font-weight:700;color:var(--md);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px;}
+.ff input,.ff select,.ff textarea{width:100%;border:1.5px solid var(--bd);border-radius:8px;padding:10px 12px;font-family:'Nunito',sans-serif;font-size:14px;color:var(--dk);outline:none;transition:border-color 0.2s;}
+.ff input:focus,.ff select:focus,.ff textarea:focus{border-color:var(--or);}
+.ff textarea{resize:vertical;min-height:70px;}
+.order-summary-item{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bd);font-size:14px;}
+.order-summary-item:last-child{border-bottom:none;}
+.place-btn{width:100%;background:var(--or);color:white;border:none;border-radius:10px;padding:14px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;}
+.place-btn:hover{background:var(--orl);}
+/* CONFIRM */
+.conw{max-width:560px;margin:0 auto;padding:22px;}
+.conhero{text-align:center;padding:36px 20px 28px;}
+.coni{font-size:68px;margin-bottom:14px;}
+.cont{font-family:'Baloo 2',cursive;font-size:30px;font-weight:800;color:var(--gr);margin-bottom:7px;}
+.cons{font-size:14px;color:var(--md);}
+.concard{background:var(--wh);border:1.5px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+.conch{background:var(--lt);padding:12px 18px;font-size:13px;font-weight:700;color:var(--md);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--bd);}
+.concb{padding:14px 18px;}
+.conrow{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bd);font-size:14px;}
+.conrow:last-child{border-bottom:none;}
+.conrl{color:var(--md);}
+.conrv{font-weight:700;}
+.conrv.tot{color:var(--or);font-family:'Baloo 2',cursive;font-size:17px;}
+.conas{display:flex;flex-direction:column;gap:9px;margin-top:7px;}
+.conbp{background:var(--or);color:white;border:none;border-radius:9px;padding:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+.conbs{background:var(--wh);color:var(--dk);border:1.5px solid var(--bd);border-radius:9px;padding:11px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
+.wabtn{background:#25D366;color:white;border:none;border-radius:9px;padding:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;}
+/* TRACKING */
+.trkw{max-width:660px;margin:0 auto;padding:22px;}
+.trksr{display:flex;gap:10px;margin-bottom:28px;}
+.trkin{flex:1;border:1.5px solid var(--bd);border-radius:9px;padding:11px 14px;font-family:'Nunito',sans-serif;font-size:14px;outline:none;}
+.trkin:focus{border-color:var(--or);}
+.trkbtn{background:var(--or);color:white;border:none;border-radius:9px;padding:11px 22px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+.trkres{background:var(--wh);border:1.5px solid var(--bd);border-radius:14px;overflow:hidden;}
+.trkhd{background:var(--or);padding:18px 22px;color:white;}
+.trkbody{padding:22px;}
+.trksbadge{display:inline-flex;align-items:center;gap:5px;background:var(--grp);color:var(--gr);font-size:13px;font-weight:700;padding:5px 13px;border-radius:20px;margin-bottom:20px;}
+.trksteps{position:relative;padding-left:26px;}
+.trksteps::before{content:'';position:absolute;left:8px;top:8px;bottom:8px;width:2px;background:var(--bd);}
+.trkstep{position:relative;padding:0 0 20px 18px;}
+.trkstep:last-child{padding-bottom:0;}
+.trkdot{position:absolute;left:-18px;top:2px;width:16px;height:16px;border-radius:50%;border:2px solid var(--bd);background:var(--wh);display:flex;align-items:center;justify-content:center;font-size:8px;}
+.trkdot.done{background:var(--gr);border-color:var(--gr);color:white;}
+.trkdot.act{background:var(--or);border-color:var(--or);color:white;}
+.trkstt{font-size:14px;font-weight:700;margin-bottom:2px;}
+.trkssb{font-size:12px;color:var(--md);}
+/* LOGIN */
+.lgw{max-width:400px;margin:36px auto;padding:20px;}
+.lgcard{background:var(--wh);border:1.5px solid var(--bd);border-radius:18px;padding:28px;}
+.lgtabs{display:flex;border:1.5px solid var(--bd);border-radius:9px;overflow:hidden;margin-bottom:20px;}
+.lgtab{flex:1;padding:9px;text-align:center;font-size:14px;font-weight:700;cursor:pointer;color:var(--md);}
+.lgtab.on{background:var(--or);color:white;}
+.lgf{margin-bottom:14px;}
+.lgf label{display:block;font-size:13px;font-weight:700;color:var(--dk);margin-bottom:5px;}
+.lgf input{width:100%;border:1.5px solid var(--bd);border-radius:9px;padding:10px 13px;font-family:'Nunito',sans-serif;font-size:14px;color:var(--dk);outline:none;}
+.lgf input:focus{border-color:var(--or);}
+.lgsub{width:100%;background:var(--or);color:white;border:none;border-radius:9px;padding:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;}
+.lgdiv{text-align:center;font-size:13px;color:var(--md);margin:14px 0;position:relative;}
+.lgdiv::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--bd);}
+.lgdiv span{background:var(--wh);padding:0 10px;position:relative;}
+.lgsoc{width:100%;border:1.5px solid var(--bd);border-radius:9px;padding:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:var(--wh);color:var(--dk);display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:8px;}
+/* FOOTER */
+footer{background:var(--dk);color:rgba(255,255,255,.7);padding:36px 28px 22px;margin-top:36px;}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:28px;max-width:1200px;margin:0 auto 28px;}
+.fcol h4{font-family:'Baloo 2',cursive;color:white;font-size:14px;margin-bottom:10px;}
+.fcol p{font-size:13px;line-height:1.6;}
+.fcol a{display:block;font-size:13px;color:rgba(255,255,255,.6);text-decoration:none;margin-bottom:7px;cursor:pointer;}
+.fcol a:hover{color:var(--or);}
+.fsoc{display:flex;gap:8px;margin-top:10px;}
+.fsocb{width:34px;height:34px;border-radius:7px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:background 0.2s;}
+.fsocb:hover{background:var(--or);}
+.fbot{border-top:1px solid rgba(255,255,255,.1);padding-top:18px;text-align:center;font-size:12px;max-width:1200px;margin:0 auto;}
+.fbadges{display:flex;justify-content:center;gap:10px;margin-top:10px;flex-wrap:wrap;}
+.fbadge{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);font-size:11px;padding:3px 10px;border-radius:5px;}
+.waf{position:fixed;bottom:22px;right:22px;z-index:300;background:#25D366;color:white;border:none;border-radius:50px;padding:11px 18px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:7px;box-shadow:0 4px 18px rgba(37,211,102,.4);transition:transform 0.2s;}
+.waf:hover{transform:translateY(-3px);}
+.wadot{width:7px;height:7px;background:#4BFF8C;border-radius:50%;animation:wab 1.5s infinite;}
+@keyframes wab{0%,100%{opacity:1;}50%{opacity:.3;}}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dk);color:white;padding:11px 22px;border-radius:9px;font-size:14px;font-weight:600;z-index:9999;transition:transform 0.3s;white-space:nowrap;}
 .toast.on{transform:translateX(-50%) translateY(0);}
-.wa-setup{background:var(--wh);border:1.5px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:20px;}
-.wa-setup h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.wa-setup input{width:100%;border:1.5px solid var(--bd);border-radius:8px;padding:9px 12px;font-family:'Nunito',sans-serif;font-size:14px;outline:none;margin-bottom:8px;}
-.wa-setup input:focus{border-color:var(--or);}
-.wa-setup button{background:var(--or);color:white;border:none;border-radius:8px;padding:9px 18px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
-@media(max-width:600px){
-  .stats{grid-template-columns:repeat(2,1fr);}
-  .odetails{grid-template-columns:1fr;}
+@media(max-width:640px){
+  nav{padding:0 10px;height:54px;}
+  .srch{margin:0 7px;}
+  .nbtn:not(.cbtn){display:none;}
+  .hero{padding:22px 14px;flex-direction:column;}
+  .hero h1{font-size:26px;}
+  .hvis{display:none;}
+  .sec{padding:14px 10px;}
+  .pgrid{grid-template-columns:repeat(2,1fr);gap:9px;}
+  .pdg{grid-template-columns:1fr;}
+  .frow{grid-template-columns:1fr;}
+  .csb{width:100%;right:-100%;}
+  .waf{bottom:14px;right:14px;}
+  footer{padding:24px 14px 18px;}
 }
 </style>
 </head>
 <body>
 
-<!-- PASSWORD LOCK -->
-<div class="lock" id="lock">
-  <div class="lockbox">
-    <h2>🔒 Admin Panel</h2>
-    <p>ShopKart India — Owner Access Only</p>
-    <input type="password" id="pinInput" placeholder="Enter PIN" onkeydown="if(event.key==='Enter')checkPin()"/>
-    <button onclick="checkPin()">Login →</button>
-    <div style="font-size:12px;color:var(--md);margin-top:10px;">Default PIN: 1234 (change it below after login)</div>
-  </div>
-</div>
-
 <nav>
-  <div class="logo">ShopKart <span>India</span> — Admin</div>
-  <span class="abadge">🔐 Owner Panel</span>
+  <a class="logo" onclick="goHome()">
+    <div class="logo-box">🛒</div>ShopKart <span>India</span>
+  </a>
+  <div class="srch">
+    <input type="text" id="si" placeholder="Search products..."/>
+    <button onclick="doSearch()">🔍</button>
+  </div>
+  <div class="nav-r">
+    <button class="nbtn" onclick="openPage('lgPage')">👤 Login</button>
+    <button class="nbtn" onclick="openPage('trkPage')">📦 Track</button>
+    <button class="nbtn cbtn" onclick="toggleCart()">🛒 Cart<span class="cc" id="cc">0</span></button>
+  </div>
 </nav>
 
-<div style="max-width:1000px;margin:0 auto;padding:20px;">
-  <div class="stats">
-    <div class="stat"><div class="stat-num" id="s-total">0</div><div class="stat-lbl">Total Orders</div></div>
-    <div class="stat"><div class="stat-num" id="s-new" style="color:var(--or);">0</div><div class="stat-lbl">New Orders</div></div>
-    <div class="stat"><div class="stat-num" id="s-proc" style="color:#3B82F6;">0</div><div class="stat-lbl">Processing</div></div>
-    <div class="stat"><div class="stat-num" id="s-rev" style="color:var(--gr);">₹0</div><div class="stat-lbl">Total Revenue</div></div>
+<div class="catbar">
+  <div class="cpill on" onclick="filterCat('all',this)">All Products</div>
+  <div class="cpill" onclick="filterCat('electronics',this)">Electronics</div>
+  <div class="cpill" onclick="filterCat('home',this)">Home &amp; Kitchen</div>
+  <div class="cpill" onclick="filterCat('beauty',this)">Beauty</div>
+  <div class="cpill" onclick="filterCat('toys',this)">Toys &amp; Kids</div>
+  <div class="cpill" onclick="filterCat('sports',this)">Sports</div>
+</div>
+
+<div class="sbanner">
+  <div class="stxt"><span class="sbadge">SALE LIVE</span>Mega Sale — Up to 70% Off! Ends in:</div>
+  <div class="scd">
+    <div class="scb" id="cdH">08</div><span class="scs">:</span>
+    <div class="scb" id="cdM">45</div><span class="scs">:</span>
+    <div class="scb" id="cdS">30</div>
   </div>
 </div>
 
-<div class="main">
-
-  <!-- WA SETUP -->
-  <div class="wa-setup">
-    <h3>💬 WhatsApp Notification Setup</h3>
-    <div style="font-size:13px;color:var(--md);margin-bottom:10px;">Enter your WhatsApp number to receive instant order notifications</div>
-    <input type="tel" id="waNum" placeholder="+91 99999 99999" value=""/>
-    <button onclick="saveWA()">Save Number</button>
-    <span id="waSaved" style="font-size:12px;color:var(--gr);margin-left:10px;display:none;">✓ Saved!</span>
+<div class="hero">
+  <div class="htxt">
+    <div class="hbadge">🇮🇳 India ka Apna Store</div>
+    <h1>Best Deals,<br>Delivered Fast!</h1>
+    <p>Top products at lowest prices — delivered directly to your door.</p>
+    <a class="hcta" href="#prods">Shop Now →</a>
+    <div class="htags">
+      <div class="htag">📦 Free Delivery</div>
+      <div class="htag">✅ Genuine Products</div>
+      <div class="htag">🔄 Easy Returns</div>
+    </div>
   </div>
-
-  <div class="section-title">📦 All Orders</div>
-  <div class="orders" id="ordersList">
-    <div class="empty">
-      <div class="empty-icon">📭</div>
-      <div style="font-weight:700;margin-bottom:4px;">No orders yet</div>
-      <div style="font-size:13px;">When customers order on ShopKart India, they'll appear here instantly</div>
+  <div class="hvis">
+    <div class="bnum">500+</div><div class="blbl">Products Available</div>
+    <div style="margin-top:14px;border-top:1px solid rgba(255,255,255,.2);padding-top:12px;">
+      <div class="bnum" style="font-size:30px;">10K+</div><div class="blbl">Happy Customers</div>
     </div>
   </div>
 </div>
 
+<div class="trust">
+  <div class="ti"><div class="tico">📦</div>Free Delivery above ₹499</div>
+  <div class="ti"><div class="tico">🔄</div>7-Day Returns</div>
+  <div class="ti"><div class="tico">🔒</div>Secure Payments</div>
+  <div class="ti"><div class="tico">⭐</div>Genuine Products</div>
+  <div class="ti"><div class="tico">💬</div>WhatsApp Support</div>
+</div>
+
+<div class="sec">
+  <div class="sechd"><div class="sectit">🗂️ Shop by Category</div></div>
+  <div class="cgrid">
+    <div class="ccard" onclick="filterCat('electronics',null)"><div class="cemoji">📱</div><div class="cname">Electronics</div></div>
+    <div class="ccard" onclick="filterCat('home',null)"><div class="cemoji">🏠</div><div class="cname">Home &amp; Kitchen</div></div>
+    <div class="ccard" onclick="filterCat('beauty',null)"><div class="cemoji">💄</div><div class="cname">Beauty</div></div>
+    <div class="ccard" onclick="filterCat('toys',null)"><div class="cemoji">🧸</div><div class="cname">Toys &amp; Kids</div></div>
+    <div class="ccard" onclick="filterCat('sports',null)"><div class="cemoji">⚽</div><div class="cname">Sports</div></div>
+  </div>
+</div>
+
+<div class="sec" id="prods">
+  <div class="sechd">
+    <div class="sectit" id="stit">🔥 Trending Products</div>
+    <a class="seeall" onclick="filterCat('all',null)">See All</a>
+  </div>
+  <div class="pgrid" id="pgrid"></div>
+</div>
+
+<!-- CART -->
+<div class="cov" id="cov" onclick="toggleCart()"></div>
+<div class="csb" id="csb">
+  <div class="cshd"><h2>🛒 My Cart</h2><button class="xbtn" onclick="toggleCart()">✕</button></div>
+  <div class="citems" id="citems">
+    <div class="cemp"><div style="font-size:44px;margin-bottom:10px;">🛒</div><div style="font-weight:700;margin-bottom:4px;">Cart is empty!</div><div style="font-size:13px;">Add products to start</div></div>
+  </div>
+  <div class="cft">
+    <div class="ctot"><span class="ctotl">Total</span><span class="ctotv" id="ctotv">₹0</span></div>
+    <button class="ckbtn" onclick="goCheckout()">Proceed to Checkout →</button>
+    <div style="text-align:center;font-size:11px;color:var(--md);margin-top:7px;">🔒 Safe & Secure Checkout</div>
+  </div>
+</div>
+
+<button class="waf" onclick="openWA()"><span style="font-size:18px;">💬</span><span class="wadot"></span>WhatsApp Support</button>
 <div class="toast" id="toast"></div>
 
+<footer>
+  <div class="fgrid">
+    <div class="fcol">
+      <h4>ShopKart India</h4>
+      <p>India ka apna online store. Best deals, delivered to your door.</p>
+      <div class="fsoc">
+        <div class="fsocb">📸</div>
+        <div class="fsocb">📘</div>
+        <div class="fsocb" onclick="openWA()">💬</div>
+        <div class="fsocb">▶️</div>
+      </div>
+    </div>
+    <div class="fcol">
+      <h4>Quick Links</h4>
+      <a onclick="goHome()">Home</a>
+      <a onclick="filterCat('all',null)">All Products</a>
+      <a href="#prods">Deals Today</a>
+    </div>
+    <div class="fcol">
+      <h4>Customer Care</h4>
+      <a onclick="openPage('trkPage')">Track My Order</a>
+      <a href="#">Return &amp; Refund</a>
+      <a onclick="openWA()">WhatsApp Us</a>
+    </div>
+    <div class="fcol">
+      <h4>Policies</h4>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Shipping Policy</a>
+    </div>
+  </div>
+  <div class="fbot">
+    <div>© 2025 ShopKart India. Made with ❤️ in India.</div>
+    <div class="fbadges">
+      <span class="fbadge">Amazon Products</span>
+      <span class="fbadge">Flipkart Products</span>
+      <span class="fbadge">Secure Payments</span>
+    </div>
+  </div>
+</footer>
+
+<!-- PRODUCT DETAIL PAGE -->
+<div class="page" id="pdPage">
+  <div class="pgnav">
+    <button class="bbtn" onclick="closePage('pdPage')">← Back</button>
+    <span class="pgtit" id="pdbc">Product</span>
+  </div>
+  <div class="pdw">
+    <div class="pdg">
+      <div class="pdimg" id="pdImgWrap"><span id="pdEmoji">📦</span></div>
+      <div>
+        <div class="pdsb amazon" id="pdSrc">via Amazon</div>
+        <div class="pdname" id="pdName">Product</div>
+        <div class="pdrat"><span class="pdstars">★★★★☆</span><span class="pdrc" id="pdRc">4.2 (128 reviews)</span></div>
+        <div class="pdpr">
+          <div class="pdprice" id="pdPrice">₹0</div>
+          <div class="pdmrp" id="pdMrp">₹0</div>
+          <div class="pddtag" id="pdDisc">50% off</div>
+        </div>
+        <div class="pdsav" id="pdSav">You save ₹0!</div>
+        <div style="height:1px;background:var(--bd);margin:14px 0;"></div>
+        <div class="pdlbl">Description</div>
+        <div class="pddesc" id="pdDesc">Loading...</div>
+        <div class="pdlbl">Key Features</div>
+        <ul class="pdfeat" id="pdFeat"></ul>
+        <div class="pdacts">
+          <button class="pdadd" id="pdBtn" onclick="pdAct()">+ Add to Cart</button>
+          <button class="pdwish">♡ Wishlist</button>
+        </div>
+        <div class="pddel">🚚 <strong>Free delivery</strong> above ₹499 &nbsp;|&nbsp; 📦 Ships in 2–5 days</div>
+      </div>
+    </div>
+    <div class="revs">
+      <div style="font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:7px;">💬 Customer Reviews</div>
+      <div id="pdRevs"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT PAGE -->
+<div class="page" id="chkPage">
+  <div class="pgnav">
+    <button class="bbtn" onclick="closePage('chkPage')">← Back to Cart</button>
+    <span class="pgtit">Checkout</span>
+  </div>
+  <div class="chkw">
+    <div class="chkcard">
+      <div class="chkch">📦 Order Summary</div>
+      <div class="concb" id="chkSummary"></div>
+    </div>
+    <div class="chkcard">
+      <div class="chkch">📍 Delivery Details</div>
+      <div class="chkcb">
+        <div class="frow">
+          <div class="ff"><label>Full Name *</label><input type="text" id="fName" placeholder="Rahul Kumar"/></div>
+          <div class="ff"><label>Mobile Number *</label><input type="tel" id="fPhone" placeholder="+91 99999 99999"/></div>
+        </div>
+        <div class="frow full">
+          <div class="ff"><label>Full Address *</label><textarea id="fAddr" placeholder="House no, Street, Area, Landmark..."></textarea></div>
+        </div>
+        <div class="frow">
+          <div class="ff"><label>City *</label><input type="text" id="fCity" placeholder="Delhi"/></div>
+          <div class="ff"><label>Pincode *</label><input type="text" id="fPin" placeholder="110001"/></div>
+        </div>
+        <div class="frow">
+          <div class="ff"><label>State *</label>
+            <select id="fState">
+              <option value="">Select State</option>
+              <option>Delhi</option><option>Maharashtra</option><option>Karnataka</option>
+              <option>Tamil Nadu</option><option>Uttar Pradesh</option><option>Gujarat</option>
+              <option>Rajasthan</option><option>West Bengal</option><option>Madhya Pradesh</option>
+              <option>Haryana</option><option>Punjab</option><option>Bihar</option>
+              <option>Telangana</option><option>Andhra Pradesh</option><option>Kerala</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="ff"><label>Payment Mode</label>
+            <select id="fPay">
+              <option value="cod">💵 Cash on Delivery (COD)</option>
+              <option value="upi">📱 UPI / Online Payment</option>
+            </select>
+          </div>
+        </div>
+        <button class="place-btn" onclick="placeOrder()">✅ Place Order →</button>
+        <div style="text-align:center;font-size:12px;color:var(--md);margin-top:8px;">🔒 Your data is safe. We never share your details.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM PAGE -->
+<div class="page" id="conPage">
+  <div class="pgnav">
+    <button class="bbtn" onclick="closePage('conPage');goHome();">← Continue Shopping</button>
+    <span class="pgtit">Order Confirmed!</span>
+  </div>
+  <div class="conw">
+    <div class="conhero">
+      <div class="coni">🎉</div>
+      <div class="cont">Order Placed!</div>
+      <div class="cons" id="conMsg">Your order is confirmed and will be delivered in 3–5 business days.</div>
+    </div>
+    <div class="concard">
+      <div class="conch">Order Summary</div>
+      <div class="concb" id="conItems"></div>
+    </div>
+    <div class="concard">
+      <div class="conch">Order Details</div>
+      <div class="concb">
+        <div class="conrow"><span class="conrl">Order ID</span><span class="conrv" id="conOid">SKI-001</span></div>
+        <div class="conrow"><span class="conrl">Customer</span><span class="conrv" id="conName">-</span></div>
+        <div class="conrow"><span class="conrl">Delivery to</span><span class="conrv" id="conAddr">-</span></div>
+        <div class="conrow"><span class="conrl">Payment</span><span class="conrv" id="conPay">COD</span></div>
+        <div class="conrow"><span class="conrl">Total</span><span class="conrv tot" id="conTot">₹0</span></div>
+      </div>
+    </div>
+    <div class="conas">
+      <button class="wabtn" onclick="openWA()">💬 Questions? WhatsApp Us</button>
+      <button class="conbp" onclick="openPage('trkPage')">📦 Track My Order</button>
+      <button class="conbs" onclick="closePage('conPage');goHome();">Continue Shopping</button>
+    </div>
+  </div>
+</div>
+
+<!-- TRACKING PAGE -->
+<div class="page" id="trkPage">
+  <div class="pgnav">
+    <button class="bbtn" onclick="closePage('trkPage')">← Back</button>
+    <span class="pgtit">Track My Order</span>
+  </div>
+  <div class="trkw">
+    <div style="margin-bottom:7px;font-size:14px;color:var(--md);">Enter your Order ID to get live status.</div>
+    <div class="trksr">
+      <input class="trkin" id="trkin" placeholder="e.g. SKI-2025-001"/>
+      <button class="trkbtn" onclick="doTrack()">Track →</button>
+    </div>
+    <div id="trkResult"></div>
+  </div>
+</div>
+
+<!-- LOGIN PAGE -->
+<div class="page" id="lgPage">
+  <div class="pgnav">
+    <button class="bbtn" onclick="closePage('lgPage')">← Back</button>
+    <span class="pgtit">My Account</span>
+  </div>
+  <div class="lgw">
+    <div class="lgcard">
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:var(--or);">ShopKart <span style="color:var(--dk);">India</span></div>
+        <div style="font-size:13px;color:var(--md);margin-top:5px;">Sign in or create your account</div>
+      </div>
+      <div class="lgtabs">
+        <div class="lgtab on" id="ltab" onclick="swTab('login')">Login</div>
+        <div class="lgtab" id="stab" onclick="swTab('signup')">Sign Up</div>
+      </div>
+      <div id="lform">
+        <div class="lgf"><label>Mobile / Email</label><input type="text" placeholder="Enter mobile or email"/></div>
+        <div class="lgf"><label>Password</label><input type="password" placeholder="Enter password"/></div>
+        <button class="lgsub" onclick="doLogin()">Login →</button>
+      </div>
+      <div id="sform" style="display:none;">
+        <div class="lgf"><label>Full Name</label><input type="text" placeholder="Your name"/></div>
+        <div class="lgf"><label>Mobile Number</label><input type="tel" placeholder="+91 XXXXX XXXXX"/></div>
+        <div class="lgf"><label>Password</label><input type="password" placeholder="Create password"/></div>
+        <button class="lgsub" onclick="doSignup()">Create Account →</button>
+      </div>
+      <div class="lgdiv"><span>or</span></div>
+      <button class="lgsoc" onclick="openWA()">💬 Login via WhatsApp OTP</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const PIN = localStorage.getItem('adminPin') || '1234';
+// ── PRODUCTS ──
+const prods = [
+  // ELECTRONICS
+  {id:1,name:"boAt Airdopes 141 TWS Earbuds",e:"🎧",price:899,mrp:2990,disc:"70%",cat:"electronics",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/51fJGwuqLEL._SX679_.jpg",desc:"True wireless earbuds with 42H total playback, IPX4 water resistance, and ASAP Charge technology. Best earbuds under ₹1000.",feat:["42 Hour total playback","ASAP Charge support","IPX4 water resistant","Bluetooth v5.0","Instant voice assistant"]},
+  {id:2,name:"Redmi 33W Fast Charger with Cable",e:"🔌",price:449,mrp:999,disc:"55%",cat:"electronics",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/51q0O5WPMTL._SX679_.jpg",desc:"Original 33W Turbo charge adapter with Type-C cable. Compatible with all Type-C smartphones. Charges phone to 50% in 30 mins.",feat:["33W fast charging","Type-C to Type-C cable","1 metre cable","All brand compatible","Overheat protection"]},
+  {id:3,name:"Portronics Toad 23 Wireless Mouse",e:"🖱️",price:349,mrp:995,disc:"65%",cat:"electronics",src:"flipkart",type:"cart",img:"https://rukminim2.flixcart.com/image/416/416/xif0q/mouse/x/x/c/-original-imah3y5hfhgcfhfg.jpeg",desc:"Ergonomic wireless mouse with 2.4GHz technology. Works up to 10 metres range. USB nano receiver. Perfect for office and home use.",feat:["2.4GHz wireless","10m working range","USB nano receiver","800/1200/1600 DPI","For Windows, Mac, Linux"]},
+  {id:4,name:"Ambrane 10000mAh Power Bank",e:"🔋",price:699,mrp:1999,disc:"65%",cat:"electronics",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/61-LDqnrKhL._SX679_.jpg",desc:"10000mAh slim power bank with dual USB output. Charges 2 devices simultaneously. LED battery indicator. Ideal for travel.",feat:["10000mAh capacity","Dual USB output","Type-C and Micro-USB input","LED indicator","Slim lightweight design"]},
+  {id:5,name:"Zebronics Zeb-Sound Bomb Headphones",e:"🎵",price:599,mrp:1499,disc:"60%",cat:"electronics",src:"flipkart",type:"cart",img:"https://rukminim2.flixcart.com/image/416/416/xif0q/headphone/m/q/s/-original-imaghfbf5gcgehhn.jpeg",desc:"Wired stereo headphones with deep bass and 40mm drivers. Foldable design with mic. Perfect for music and calls.",feat:["40mm drivers","Deep bass sound","In-line mic","Foldable design","3.5mm universal jack"]},
+  // HOME & KITCHEN
+  {id:6,name:"Milton Thermosteel Flip Lid Bottle 500ml",e:"🧃",price:449,mrp:999,disc:"55%",cat:"home",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/71dhFkaMfML._SX679_.jpg",desc:"Stainless steel insulated bottle. Keeps beverages hot for 24 hours and cold for 24 hours. Flip lid for easy use. BPA free.",feat:["24 hours hot & cold","Food grade stainless steel","Leak proof flip lid","500ml capacity","BPA free"]},
+  {id:7,name:"Prestige Popular Plus Induction Base Tawa",e:"🍳",price:599,mrp:1295,disc:"54%",cat:"home",src:"flipkart",type:"cart",img:"https://rukminim2.flixcart.com/image/416/416/xif0q/cookware/f/k/s/-original-imagyzgffxfkehq4.jpeg",desc:"Hard anodised tawa with induction base. Non-stick surface. 250mm diameter. Perfect for rotis, dosas and parathas.",feat:["Hard anodised surface","Induction compatible","Non-stick coating","250mm diameter","Easy grip handle"]},
+  {id:8,name:"Pigeon by Stovekraft Healthifry Air Fryer 4L",e:"🥗",price:2499,mrp:5999,disc:"58%",cat:"home",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/71iEsXi2KJL._SX679_.jpg",desc:"4 litre digital air fryer with 7 preset cooking modes. Cook healthier food with 90% less oil. Digital display with timer.",feat:["4 litre capacity","7 preset modes","90% less oil cooking","Digital display","Auto-shutoff timer"]},
+  {id:9,name:"Solimo 500ml Cleaning Spray Bottles Set of 3",e:"🧹",price:299,mrp:699,disc:"57%",cat:"home",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/71MBnGnFsEL._SX679_.jpg",desc:"Set of 3 multi-purpose trigger spray bottles. Adjustable nozzle — mist to stream. Perfect for cleaning, gardening and sanitising.",feat:["Set of 3 bottles","500ml each","Adjustable nozzle","Leak-proof design","Multi-purpose use"]},
+  {id:10,name:"Asian Paints ezyCR8 Wall Painting Tool Kit",e:"🎨",price:399,mrp:899,disc:"56%",cat:"home",src:"flipkart",type:"cart",img:"https://rukminim2.flixcart.com/image/416/416/xif0q/paint-tool/d/d/x/-original-imagw6hm3fzfzhqh.jpeg",desc:"Complete wall painting kit with roller, tray and brush. Suitable for interior and exterior walls. Washable and reusable.",feat:["Complete painting kit","Roller + tray + brush","Interior & exterior use","Washable roller","Comfortable grip"]},
+  // BEAUTY
+  {id:11,name:"Mamaearth Vitamin C Face Wash 100ml",e:"🧴",price:199,mrp:399,disc:"50%",cat:"beauty",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/61B4lB5IOZL._SX679_.jpg",desc:"Natural face wash with Vitamin C and Turmeric. Brightens skin, removes tan. Toxin-free, made safe certified. For all skin types.",feat:["Vitamin C and Turmeric","Made Safe certified","No SLS/SLES","No parabens","All skin types"]},
+  {id:12,name:"Biotique Bio Papaya Scrub 75g",e:"🧖",price:149,mrp:299,disc:"50%",cat:"beauty",src:"flipkart",type:"cart",img:"https://rukminim2.flixcart.com/image/416/416/xif0q/scrub-exfoliator/l/o/n/-original-imag5fpfgqbzgyhf.jpeg",desc:"Natural papaya and honey scrub. Gently exfoliates dead skin cells. Leaves skin smooth and glowing. Natural Ayurvedic formula.",feat:["Natural papaya extract","Honey and herbs","Removes dead skin","Suits all skin types","Ayurvedic formula"]},
+  {id:13,name:"WOW Skin Science Apple Cider Vinegar Shampoo",e:"💆",price:299,mrp:599,disc:"50%",cat:"beauty",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/71tN7jklBKL._SX679_.jpg",desc:"Apple Cider Vinegar shampoo for healthy shiny hair. Balances scalp pH. Controls frizz and dandruff. Sulfate and paraben free.",feat:["Apple Cider Vinegar","Controls dandruff","Reduces frizz","No sulfate, no paraben","For all hair types"]},
+  {id:14,name:"Lakme Sun Expert SPF 50 Sunscreen 100ml",e:"☀️",price:249,mrp:499,disc:"50%",cat:"beauty",src:"flipkart",type:"cart",img:"https://rukminim2.flixcart.com/image/416/416/xif0q/sunscreen/y/z/o/-original-imagxf7gzxhkpfgc.jpeg",desc:"Lightweight SPF 50 sunscreen. Protects from UVA and UVB rays. Non-greasy formula. Suitable for daily use in Indian weather.",feat:["SPF 50 protection","UVA + UVB shield","Non-greasy formula","100ml quantity","Daily use suitable"]},
+  {id:15,name:"Beardo Beard and Hair Groww Oil 50ml",e:"🧔",price:249,mrp:549,disc:"55%",cat:"beauty",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/61mMt+XLlBL._SX679_.jpg",desc:"Beard growth oil with 7 natural oils. Promotes beard growth, reduces itchiness, conditions beard. For men who want a thicker beard.",feat:["7 natural oils blend","Promotes beard growth","Reduces beard itch","Conditions and softens","Light non-greasy formula"]},
+  // TOYS & KIDS
+  {id:16,name:"Funskool Giggles Fun Activity Gym",e:"🧸",price:999,mrp:2299,disc:"57%",cat:"toys",src:"flipkart",type:"cart",img:"https://rukminim2.flixcart.com/image/416/416/xif0q/baby-gym/z/3/m/-original-imag3hkfhz7fgeyf.jpeg",desc:"Baby activity gym with colorful toys, mirror and music. Stimulates senses. Suitable for babies 0-12 months. BPA free materials.",feat:["Colorful hanging toys","Musical toys included","Baby-safe mirror","Soft mat underneath","Age 0 to 12 months"]},
+  {id:17,name:"Lego Classic Creative Bricks 221 pcs",e:"🧩",price:799,mrp:1499,disc:"47%",cat:"toys",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/81ZJ5V5DqgL._SX679_.jpg",desc:"221 piece LEGO classic set with colourful bricks. Build houses, vehicles, animals — anything! Great for creativity and learning.",feat:["221 pieces","Multiple colors","Builds anything","Compatible with all LEGO","Ages 4 and above"]},
+  {id:18,name:"Funskool Handycrafts Drawing Kit",e:"🎨",price:349,mrp:699,disc:"50%",cat:"toys",src:"flipkart",type:"cart",img:"https://rukminim2.flixcart.com/image/416/416/xif0q/art-craft-kit/k/t/m/-original-imag5f3gfhzfehqr.jpeg",desc:"Complete drawing and colouring kit for kids. 50+ pieces including crayons, sketch pens, colour pencils. Ages 4 and above.",feat:["50+ art pieces","Crayons and sketch pens","Colour pencils included","Washable colours","Ages 4 and above"]},
+  {id:19,name:"Ratnas Spinning Top Set of 5",e:"🪀",price:199,mrp:399,disc:"50%",cat:"toys",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/71GNwJpFZtL._SX679_.jpg",desc:"Classic spinning tops in bright colours. Set of 5. Sturdy plastic construction. Great for outdoor play and competitions.",feat:["Set of 5 tops","Bright attractive colors","Sturdy plastic","For outdoor play","Ages 3 and above"]},
+  {id:20,name:"OK Play Tuk Tuk Play Tent House",e:"🏕️",price:1299,mrp:2999,disc:"57%",cat:"toys",src:"flipkart",type:"cart",img:"https://rukminim2.flixcart.com/image/416/416/xif0q/kids-tent-house/r/x/d/-original-imagz3gfhzfkhqfg.jpeg",desc:"Kids play tent house with printed designs. Easy to assemble, no tools needed. Soft fabric. Great for indoor play and pretend play.",feat:["Easy assembly","Soft safe fabric","Attractive prints","Indoor/outdoor use","Ages 2 to 6 years"]},
+  // SPORTS
+  {id:21,name:"Boldfit Yoga Mat 6mm with Bag",e:"🧘",price:499,mrp:1299,disc:"62%",cat:"sports",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/71mKoT6RDGL._SX679_.jpg",desc:"6mm thick EVA yoga mat with anti-slip texture and carrying bag. Excellent grip, lightweight. Perfect for yoga, pilates and exercise.",feat:["6mm thick EVA foam","Anti-slip texture","Carrying bag included","183 x 61 cm size","Lightweight 900g"]},
+  {id:22,name:"Nivia Storm Football Size 5",e:"⚽",price:449,mrp:999,disc:"55%",cat:"sports",src:"flipkart",type:"cart",img:"https://rukminim2.flixcart.com/image/416/416/xif0q/ball/r/h/p/-original-imaghfgfhzfkhqfg.jpeg",desc:"Machine stitched football with 32 panel construction. Size 5. Ideal for training and matches. Suitable for all weather conditions.",feat:["Size 5","32 panel design","Machine stitched","All-weather use","Ideal for training"]},
+  {id:23,name:"Strauss Adjustable Skipping Rope",e:"🪢",price:199,mrp:499,disc:"60%",cat:"sports",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/61YOCXJ7GlL._SX679_.jpg",desc:"Adjustable length skipping rope with foam handles. Great for cardio, weight loss and fitness. Suitable for all age groups.",feat:["Adjustable length","Foam grip handles","Anti-tangle wire","Good for cardio","All ages suitable"]},
+  {id:24,name:"Kobo Cricket Batting Gloves",e:"🧤",price:399,mrp:899,disc:"56%",cat:"sports",src:"flipkart",type:"cart",img:"https://rukminim2.flixcart.com/image/416/416/xif0q/sport-glove/e/y/f/-original-imagz3gfhzfkhqrg.jpeg",desc:"Full finger batting gloves with Pittards leather palm. Good grip and protection. Available in sizes S, M, L. For right hand batsmen.",feat:["Pittards leather palm","Excellent grip","Full finger protection","Sizes S, M, L","Right hand batsmen"]},
+  {id:25,name:"Aurion Running Shoes for Men",e:"👟",price:699,mrp:1999,disc:"65%",cat:"sports",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/71l4PW-d7kL._SX679_.jpg",desc:"Lightweight mesh running shoes. EVA cushioned sole for comfort. Anti-skid rubber outsole. Ideal for gym, running and casual wear.",feat:["Lightweight mesh upper","EVA cushioned sole","Anti-skid outsole","Sizes 6 to 11","Gym and running use"]},
+];
 
-function checkPin() {
-  const val = document.getElementById('pinInput').value;
-  if (val === (localStorage.getItem('adminPin') || '1234')) {
-    document.getElementById('lock').style.display = 'none';
-    loadOrders();
-    loadWA();
-  } else {
-    document.getElementById('pinInput').style.borderColor = '#E24B4A';
-    showToast('❌ Wrong PIN!');
+const revData = [
+  {n:"Rahul S.",av:"RS",st:"★★★★★",dt:"12 Mar 2025",tx:"Excellent product! Got in 3 days. Quality is exactly as shown. Highly recommend ShopKart India!"},
+  {n:"Priya M.",av:"PM",st:"★★★★☆",dt:"8 Mar 2025",tx:"Good quality for the price. Delivery was on time. Will order again!"},
+  {n:"Amit K.",av:"AK",st:"★★★★★",dt:"1 Mar 2025",tx:"Amazing deal! Got it for almost half the price I was seeing elsewhere. Very happy."},
+];
+
+let cart=[], curCat='all', curProd=null, curOrder=null;
+
+// YOUR WHATSAPP NUMBER — Change this to your actual number!
+const OWNER_WA = '918368273247';
+
+function mkCard(p){
+  const imgHtml = p.img
+    ? `<img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'">`
+    : '';
+  return `<div class="pcard" onclick="openProd(${p.id})">
+    <div class="pbadge">${p.src==='amazon'?'📦 Amazon':p.src==='flipkart'?'🛍️ Flipkart':'📦 Seller'}</div>
+    <div class="pimg">${imgHtml}<span style="z-index:1;position:relative;">${p.e}</span></div>
+    <div class="pinf">
+      <div class="pname">${p.name}</div>
+      <div class="psrc ${p.src}">via ${p.src==='amazon'?'Amazon':p.src==='flipkart'?'Flipkart':'Seller'}</div>
+      <div class="prow">
+        <div>
+          <div class="pprice">₹${p.price.toLocaleString()}</div>
+          <div style="display:flex;gap:5px;align-items:center;">
+            <span class="pmrp">₹${p.mrp.toLocaleString()}</span>
+            <span class="pdisc">${p.disc} off</span>
+          </div>
+        </div>
+        <button class="abtn" onclick="event.stopPropagation();addCart(${p.id})">+ Add</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderProds(cat){
+  const f = cat==='all' ? prods : prods.filter(p=>p.cat===cat);
+  document.getElementById('pgrid').innerHTML = f.length
+    ? f.map(mkCard).join('')
+    : `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--md);">No products found.</div>`;
+}
+
+function filterCat(cat,el){
+  curCat=cat;
+  document.querySelectorAll('.cpill').forEach(p=>p.classList.remove('on'));
+  if(el)el.classList.add('on');
+  const titles = {all:'🔥 Trending Products',electronics:'📱 Electronics',home:'🏠 Home & Kitchen',beauty:'💄 Beauty & Skincare',toys:'🧸 Toys & Kids',sports:'⚽ Sports & Fitness'};
+  document.getElementById('stit').innerHTML = titles[cat]||'🔥 Products';
+  renderProds(cat);
+  document.getElementById('prods').scrollIntoView({behavior:'smooth'});
+}
+
+function openProd(id){
+  const p = prods.find(x=>x.id===id);
+  if(!p)return;
+  curProd=p;
+  document.getElementById('pdEmoji').textContent=p.e;
+  const wrap = document.getElementById('pdImgWrap');
+  if(p.img){
+    wrap.innerHTML=`<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.outerHTML='<span style=font-size:110px>${p.e}</span>"><span style="display:none">${p.e}</span>`;
   }
+  document.getElementById('pdName').textContent=p.name;
+  document.getElementById('pdbc').textContent=p.name.length>28?p.name.slice(0,28)+'…':p.name;
+  document.getElementById('pdPrice').textContent='₹'+p.price.toLocaleString();
+  document.getElementById('pdMrp').textContent='₹'+p.mrp.toLocaleString();
+  document.getElementById('pdDisc').textContent=p.disc+' off';
+  document.getElementById('pdSav').textContent='You save ₹'+(p.mrp-p.price).toLocaleString()+'!';
+  document.getElementById('pdDesc').textContent=p.desc||'High quality product.';
+  const sb=document.getElementById('pdSrc');
+  sb.textContent='via '+(p.src==='amazon'?'Amazon':p.src==='flipkart'?'Flipkart':'Seller');
+  sb.className='pdsb '+p.src;
+  document.getElementById('pdFeat').innerHTML=(p.feat||[]).map(f=>`<li>${f}</li>`).join('');
+  document.getElementById('pdRc').textContent=(3.8+Math.random()*1.1).toFixed(1)+' ('+(Math.floor(Math.random()*300+50))+' reviews)';
+  document.getElementById('pdBtn').textContent='+ Add to Cart';
+  document.getElementById('pdBtn').style.background='var(--or)';
+  document.getElementById('pdRevs').innerHTML=revData.map(r=>`
+    <div class="rcard">
+      <div class="rhd">
+        <div class="rav">${r.av}</div>
+        <div><div class="rnm">${r.n}</div><div class="rst">${r.st}</div></div>
+        <div class="rdt">${r.dt}</div>
+      </div>
+      <div class="rtxt">${r.tx}</div>
+    </div>`).join('');
+  openPage('pdPage');
 }
 
-function saveWA() {
-  const num = document.getElementById('waNum').value.trim();
-  if (!num) { showToast('❌ Enter your number first!'); return; }
-  localStorage.setItem('waNum', num);
-  document.getElementById('waSaved').style.display = 'inline';
-  showToast('✅ WhatsApp number saved!');
-  setTimeout(() => document.getElementById('waSaved').style.display = 'none', 2000);
+function pdAct(){
+  if(!curProd)return;
+  addCart(curProd.id);
+  closePage('pdPage');
 }
 
-function loadWA() {
-  const num = localStorage.getItem('waNum');
-  if (num) document.getElementById('waNum').value = num;
+function addCart(id){
+  const p=prods.find(x=>x.id===id);
+  const ex=cart.find(x=>x.id===id);
+  if(ex)ex.qty++;
+  else cart.push({...p,qty:1});
+  updCart();
+  showToast('✅ '+p.name.slice(0,25)+'... added!');
 }
 
-function loadOrders() {
-  const orders = JSON.parse(localStorage.getItem('shopkartOrders') || '[]');
-  updateStats(orders);
-  if (!orders.length) return;
-
-  const html = orders.slice().reverse().map(o => `
-    <div class="ocard ${o.status === 'new' ? 'new' : o.status === 'processing' ? 'processing' : o.status === 'shipped' ? 'shipped' : ''}" id="oc-${o.id}">
-      <div class="ohd">
-        <div class="oid">#${o.id}</div>
-        <span class="ostatus s-${o.status === 'new' ? 'new' : o.status === 'processing' ? 'proc' : o.status === 'shipped' ? 'ship' : 'del'}">${o.status === 'new' ? '🆕 New Order' : o.status === 'processing' ? '⚙️ Processing' : o.status === 'shipped' ? '🚚 Shipped' : '✅ Delivered'}</span>
-        <div class="otime">${new Date(o.time).toLocaleString('en-IN')}</div>
-      </div>
-      <div class="odetails">
-        <div class="od"><div class="odl">Customer</div><div class="odv">${o.customer}</div></div>
-        <div class="od"><div class="odl">Phone</div><div class="odv">${o.phone}</div></div>
-        <div class="od"><div class="odl">Address</div><div class="odv">${o.address}</div></div>
-        <div class="od"><div class="odl">Total Paid</div><div class="odv" style="color:var(--or);">₹${o.total.toLocaleString()}</div></div>
-      </div>
-      <div style="background:var(--lt);border-radius:8px;padding:10px;margin-bottom:10px;font-size:13px;">
-        <div style="font-weight:700;margin-bottom:4px;">🛒 Products Ordered:</div>
-        ${o.items.map(i => `<div style="color:var(--md);">${i.e} ${i.name} × ${i.qty} — ₹${(i.price * i.qty).toLocaleString()}</div>`).join('')}
-      </div>
-      <div class="oactions">
-        <button class="obtn obtn-wa" onclick="notifyWA('${o.id}')">💬 Send to WhatsApp</button>
-        <button class="obtn obtn-buy" onclick="orderOnline('${o.id}')">🛒 Order on Amazon/Flipkart</button>
-        ${o.status === 'new' ? `<button class="obtn obtn-proc" onclick="updateStatus('${o.id}','processing')">⚙️ Mark Processing</button>` : ''}
-        ${o.status === 'processing' ? `<button class="obtn obtn-ship" onclick="updateStatus('${o.id}','shipped')">🚚 Mark Shipped</button>` : ''}
-        ${o.status === 'shipped' ? `<button class="obtn obtn-del" onclick="updateStatus('${o.id}','delivered')">✅ Mark Delivered</button>` : ''}
+function updCart(){
+  const cnt=cart.reduce((a,b)=>a+b.qty,0);
+  document.getElementById('cc').textContent=cnt;
+  const tot=cart.reduce((a,b)=>a+b.price*b.qty,0);
+  document.getElementById('ctotv').textContent='₹'+tot.toLocaleString();
+  const el=document.getElementById('citems');
+  if(!cart.length){
+    el.innerHTML=`<div class="cemp"><div style="font-size:44px;margin-bottom:10px;">🛒</div><div style="font-weight:700;margin-bottom:4px;">Cart is empty!</div></div>`;
+    return;
+  }
+  el.innerHTML=cart.map(item=>`
+    <div class="citem">
+      <div class="cii">${item.img?`<img src="${item.img}" alt="${item.name}" onerror="this.outerHTML='${item.e}'">`:item.e}</div>
+      <div class="cin">
+        <div class="cinm">${item.name.length>30?item.name.slice(0,30)+'...':item.name}</div>
+        <div class="cipr">₹${(item.price*item.qty).toLocaleString()}</div>
+        <div class="cqty">
+          <button class="qb" onclick="chQty(${item.id},-1)">−</button>
+          <span class="qn">${item.qty}</span>
+          <button class="qb" onclick="chQty(${item.id},1)">+</button>
+        </div>
       </div>
     </div>`).join('');
-
-  document.getElementById('ordersList').innerHTML = html;
 }
 
-function updateStats(orders) {
-  document.getElementById('s-total').textContent = orders.length;
-  document.getElementById('s-new').textContent = orders.filter(o => o.status === 'new').length;
-  document.getElementById('s-proc').textContent = orders.filter(o => o.status === 'processing').length;
-  const rev = orders.reduce((a, b) => a + b.total, 0);
-  document.getElementById('s-rev').textContent = '₹' + rev.toLocaleString();
+function chQty(id,d){
+  const i=cart.findIndex(x=>x.id===id);
+  if(i===-1)return;
+  cart[i].qty+=d;
+  if(cart[i].qty<=0)cart.splice(i,1);
+  updCart();
 }
 
-function updateStatus(id, status) {
-  const orders = JSON.parse(localStorage.getItem('shopkartOrders') || '[]');
-  const i = orders.findIndex(o => o.id === id);
-  if (i !== -1) { orders[i].status = status; localStorage.setItem('shopkartOrders', JSON.stringify(orders)); }
-  loadOrders();
-  showToast('✅ Status updated to ' + status + '!');
+function toggleCart(){
+  document.getElementById('cov').classList.toggle('on');
+  document.getElementById('csb').classList.toggle('on');
 }
 
-function notifyWA(id) {
-  const orders = JSON.parse(localStorage.getItem('shopkartOrders') || '[]');
-  const o = orders.find(x => x.id === id);
-  if (!o) return;
-  const msg = `🛒 *New Order — ShopKart India*\n\n*Order ID:* #${o.id}\n*Customer:* ${o.customer}\n*Phone:* ${o.phone}\n*Address:* ${o.address}\n\n*Products:*\n${o.items.map(i => `${i.e} ${i.name} × ${i.qty} = ₹${(i.price*i.qty).toLocaleString()}`).join('\n')}\n\n*Total Paid:* ₹${o.total.toLocaleString()}\n\n⚡ Please order from supplier now!`;
-  const waNum = localStorage.getItem('waNum') || '';
-  const numClean = waNum.replace(/[^0-9]/g, '');
-  window.open(`https://wa.me/${numClean}?text=${encodeURIComponent(msg)}`, '_blank');
+function goCheckout(){
+  if(!cart.length){showToast('❌ Cart is empty!');return;}
+  // Build summary
+  const tot=cart.reduce((a,b)=>a+b.price*b.qty,0);
+  document.getElementById('chkSummary').innerHTML=
+    cart.map(item=>`<div class="order-summary-item"><span>${item.e} ${item.name.slice(0,30)}... ×${item.qty}</span><span style="font-weight:700;">₹${(item.price*item.qty).toLocaleString()}</span></div>`).join('')+
+    `<div class="order-summary-item"><span>Delivery</span><span style="color:var(--gr);font-weight:700;">${tot>=499?'FREE':'₹49'}</span></div>`+
+    `<div class="order-summary-item" style="font-weight:700;font-size:15px;"><span>Total</span><span style="color:var(--or);">₹${(tot>=499?tot:tot+49).toLocaleString()}</span></div>`;
+  document.getElementById('cov').classList.remove('on');
+  document.getElementById('csb').classList.remove('on');
+  openPage('chkPage');
 }
 
-function orderOnline(id) {
-  const orders = JSON.parse(localStorage.getItem('shopkartOrders') || '[]');
-  const o = orders.find(x => x.id === id);
-  if (!o) return;
-  const firstItem = o.items[0];
-  showToast('🔍 Searching for ' + firstItem.name + '...');
-  setTimeout(() => window.open(`https://www.amazon.in/s?k=${encodeURIComponent(firstItem.name)}`, '_blank'), 500);
+function placeOrder(){
+  const name=document.getElementById('fName').value.trim();
+  const phone=document.getElementById('fPhone').value.trim();
+  const addr=document.getElementById('fAddr').value.trim();
+  const city=document.getElementById('fCity').value.trim();
+  const pin=document.getElementById('fPin').value.trim();
+  const state=document.getElementById('fState').value;
+  const pay=document.getElementById('fPay').value;
+
+  if(!name||!phone||!addr||!city||!pin||!state){
+    showToast('❌ Please fill all required fields!');return;
+  }
+  if(!/^\d{10}$/.test(phone.replace(/[^0-9]/g,'').slice(-10))){
+    showToast('❌ Enter a valid 10-digit mobile number!');return;
+  }
+  if(!/^\d{6}$/.test(pin)){
+    showToast('❌ Enter a valid 6-digit pincode!');return;
+  }
+
+  const tot=cart.reduce((a,b)=>a+b.price*b.qty,0);
+  const delivery=tot>=499?0:49;
+  const grandTotal=tot+delivery;
+  const oid='SKI-'+Date.now().toString().slice(-6);
+  const fullAddr=`${addr}, ${city}, ${state} - ${pin}`;
+
+  const order={
+    id:oid,
+    customer:name,
+    phone:phone,
+    address:fullAddr,
+    items:[...cart],
+    total:grandTotal,
+    payment:pay,
+    status:'new',
+    time:new Date().toISOString()
+  };
+
+  // Save order to localStorage
+  const existing=JSON.parse(localStorage.getItem('shopkartOrders')||'[]');
+  existing.push(order);
+  localStorage.setItem('shopkartOrders',JSON.stringify(existing));
+  localStorage.setItem('lastOrder',JSON.stringify(order));
+
+  // Send WhatsApp notification to owner
+  sendOwnerNotification(order);
+
+  // Show confirmation
+  curOrder=order;
+  document.getElementById('conOid').textContent='#'+oid;
+  document.getElementById('conName').textContent=name;
+  document.getElementById('conAddr').textContent=fullAddr;
+  document.getElementById('conPay').textContent=pay==='cod'?'💵 Cash on Delivery':'📱 Online Payment';
+  document.getElementById('conTot').textContent='₹'+grandTotal.toLocaleString();
+  document.getElementById('conMsg').textContent=pay==='cod'
+    ?'Your order is confirmed! Keep ₹'+grandTotal.toLocaleString()+' ready for delivery. Expected in 3–5 business days.'
+    :'Your order is confirmed and will be delivered in 3–5 business days.';
+  document.getElementById('conItems').innerHTML=
+    cart.map(item=>`<div class="conrow"><span class="conrl">${item.e} ${item.name.slice(0,28)}... ×${item.qty}</span><span class="conrv">₹${(item.price*item.qty).toLocaleString()}</span></div>`).join('')+
+    (delivery?`<div class="conrow"><span class="conrl">Delivery</span><span class="conrv">₹49</span></div>`:`<div class="conrow"><span class="conrl">Delivery</span><span class="conrv" style="color:var(--gr);">FREE</span></div>`);
+
+  cart=[];updCart();
+  closePage('chkPage');
+  openPage('conPage');
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('on');
-  setTimeout(() => t.classList.remove('on'), 2500);
+function sendOwnerNotification(order){
+  const msg=`🛒 *NEW ORDER — ShopKart India!*\n\n`+
+    `*Order ID:* #${order.id}\n`+
+    `*Customer:* ${order.customer}\n`+
+    `*Phone:* ${order.phone}\n`+
+    `*Address:* ${order.address}\n`+
+    `*Payment:* ${order.payment==='cod'?'Cash on Delivery':'Online'}\n\n`+
+    `*Products Ordered:*\n`+
+    order.items.map(i=>`${i.e} ${i.name} × ${i.qty} = ₹${(i.price*i.qty).toLocaleString()}`).join('\n')+
+    `\n\n*Total:* ₹${order.total.toLocaleString()}\n\n`+
+    `⚡ *Action needed:* Order these products from Amazon/Flipkart with customer address above!`;
+  // Open WhatsApp with pre-filled message to owner
+  setTimeout(()=>{
+    window.open(`https://wa.me/${OWNER_WA}?text=${encodeURIComponent(msg)}`, '_blank');
+  }, 1000);
 }
 
-// Auto refresh every 30 seconds
-setInterval(() => {
-  const orders = JSON.parse(localStorage.getItem('shopkartOrders') || '[]');
-  const newCount = orders.filter(o => o.status === 'new').length;
-  if (newCount > 0) document.title = `(${newCount} New!) ShopKart Admin`;
-  else document.title = 'ShopKart India — Admin Panel';
-}, 5000);
+function doTrack(){
+  const oid=document.getElementById('trkin').value.trim();
+  if(!oid){showToast('❌ Enter Order ID!');return;}
+  const orders=JSON.parse(localStorage.getItem('shopkartOrders')||'[]');
+  const o=orders.find(x=>x.id===oid.replace('#',''));
+  const res=document.getElementById('trkResult');
+  if(!o){
+    res.innerHTML=`<div style="text-align:center;padding:40px;background:var(--wh);border-radius:14px;border:1.5px solid var(--bd);">
+      <div style="font-size:40px;margin-bottom:10px;">🔍</div>
+      <div style="font-weight:700;margin-bottom:6px;">Order not found</div>
+      <div style="font-size:13px;color:var(--md);">Check your Order ID and try again</div>
+    </div>`;
+    return;
+  }
+  const steps=[
+    {label:'Order Placed',sub:`${new Date(o.time).toLocaleString('en-IN')} — Payment confirmed`,done:true,act:false},
+    {label:'Order Confirmed',sub:'Seller has confirmed your order',done:o.status!=='new',act:o.status==='new'},
+    {label:'Shipped',sub:'Your order is on the way',done:['shipped','delivered'].includes(o.status),act:o.status==='processing'},
+    {label:'Out for Delivery',sub:'Arriving today',done:o.status==='delivered',act:o.status==='shipped'},
+    {label:'Delivered',sub:'Order delivered successfully',done:o.status==='delivered',act:false},
+  ];
+  const statusLabel={new:'Order Placed',processing:'⚙️ Processing',shipped:'🚚 Shipped',delivered:'✅ Delivered'};
+  res.innerHTML=`
+    <div class="trkres">
+      <div class="trkhd">
+        <div style="font-size:13px;opacity:.85;margin-bottom:3px;">Order #${o.id}</div>
+        <div style="font-family:'Baloo 2',cursive;font-size:19px;font-weight:800;">${o.items[0].name.slice(0,35)}${o.items.length>1?' + '+(o.items.length-1)+' more':''}</div>
+      </div>
+      <div class="trkbody">
+        <div class="trksbadge">${statusLabel[o.status]||'Order Placed'}</div>
+        <div class="trksteps">
+          ${steps.map(s=>`<div class="trkstep">
+            <div class="trkdot ${s.done?'done':s.act?'act':''}">${s.done?'✓':s.act?'→':''}</div>
+            <div class="trkstt" style="${!s.done&&!s.act?'color:var(--md);':''}">${s.label}</div>
+            <div class="trkssb">${s.sub}</div>
+          </div>`).join('')}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid var(--bd);">
+          <div style="background:var(--lt);border-radius:9px;padding:11px;"><div style="font-size:11px;color:var(--md);font-weight:700;text-transform:uppercase;margin-bottom:3px;">Order ID</div><div style="font-size:14px;font-weight:700;">#${o.id}</div></div>
+          <div style="background:var(--lt);border-radius:9px;padding:11px;"><div style="font-size:11px;color:var(--md);font-weight:700;text-transform:uppercase;margin-bottom:3px;">Payment</div><div style="font-size:14px;font-weight:700;">${o.payment==='cod'?'Cash on Delivery':'Online'}</div></div>
+          <div style="background:var(--lt);border-radius:9px;padding:11px;"><div style="font-size:11px;color:var(--md);font-weight:700;text-transform:uppercase;margin-bottom:3px;">Total</div><div style="font-size:14px;font-weight:700;color:var(--or);">₹${o.total.toLocaleString()}</div></div>
+          <div style="background:var(--lt);border-radius:9px;padding:11px;"><div style="font-size:11px;color:var(--md);font-weight:700;text-transform:uppercase;margin-bottom:3px;">Deliver To</div><div style="font-size:13px;font-weight:700;">${o.address.slice(0,30)}...</div></div>
+        </div>
+        <button onclick="openWA()" style="width:100%;margin-top:12px;background:#25D366;color:white;border:none;border-radius:9px;padding:11px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">💬 Need Help? WhatsApp Us</button>
+      </div>
+    </div>`;
+}
+
+function openPage(id){document.getElementById(id).classList.add('on');document.body.style.overflow='hidden';}
+function closePage(id){document.getElementById(id).classList.remove('on');if(!document.querySelectorAll('.page.on').length)document.body.style.overflow='';}
+function goHome(){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.body.style.overflow='';window.scrollTo({top:0,behavior:'smooth'});}
+function swTab(t){
+  document.getElementById('lform').style.display=t==='login'?'block':'none';
+  document.getElementById('sform').style.display=t==='signup'?'block':'none';
+  document.getElementById('ltab').className='lgtab'+(t==='login'?' on':'');
+  document.getElementById('stab').className='lgtab'+(t==='signup'?' on':'');
+}
+function doLogin(){showToast('✅ Logged in!');setTimeout(()=>closePage('lgPage'),700);}
+function doSignup(){showToast('🎉 Account created!');setTimeout(()=>closePage('lgPage'),700);}
+function doSearch(){
+  const q=document.getElementById('si').value.toLowerCase();
+  if(!q){renderProds(curCat);return;}
+  const f=prods.filter(p=>p.name.toLowerCase().includes(q)||p.cat.includes(q));
+  document.getElementById('pgrid').innerHTML=f.length?f.map(mkCard).join(''):`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--md);">No results for "<strong>${q}</strong>"</div>`;
+}
+function openWA(){window.open('https://wa.me/'+OWNER_WA+'?text=Hi!%20I%20need%20help%20with%20my%20ShopKart%20India%20order.','_blank');}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),2500);
+}
+let secs=8*3600+45*60+30;
+setInterval(()=>{
+  secs--;if(secs<0)secs=24*3600;
+  const h=Math.floor(secs/3600),m=Math.floor((secs%3600)/60),s=secs%60;
+  document.getElementById('cdH').textContent=String(h).padStart(2,'0');
+  document.getElementById('cdM').textContent=String(m).padStart(2,'0');
+  document.getElementById('cdS').textContent=String(s).padStart(2,'0');
+},1000);
+document.getElementById('si').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+renderProds('all');
 </script>
 </body>
 </html>
