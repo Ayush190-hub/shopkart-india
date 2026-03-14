@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ShopKart India — India ka Apna Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6B00;
+      --orange-light: #FF8C33;
+      --orange-pale: #FFF3E8;
+      --green: #1BAB5E;
+      --green-pale: #E8F9F0;
+      --dark: #1A1A2E;
+      --mid: #4A4A6A;
+      --light: #F7F5FF;
+      --white: #FFFFFF;
+      --border: #E8E4F0;
+      --radius: 14px;
+      --shadow: 0 4px 24px rgba(26,26,46,0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      background: var(--white);
+      border-bottom: 1.5px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Baloo 2', cursive;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--orange);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .logo span {
+      color: var(--dark);
+    }
+
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: var(--orange);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .logo-icon svg { width: 18px; height: 18px; fill: white; }
+
+    .search-bar {
+      flex: 1;
+      max-width: 480px;
+      margin: 0 24px;
+      display: flex;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--light);
+    }
+
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 10px 16px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      color: var(--dark);
+      outline: none;
+    }
+
+    .search-bar button {
+      background: var(--orange);
+      border: none;
+      padding: 0 18px;
+      cursor: pointer;
+      color: white;
+      font-size: 16px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-btn {
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 16px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--mid);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+    .cart-btn {
+      background: var(--orange);
+      color: white;
+      border-color: var(--orange);
+      position: relative;
+    }
+
+    .cart-btn:hover { background: var(--orange-light); color: white; border-color: var(--orange-light); }
+
+    .cart-count {
+      position: absolute;
+      top: -6px; right: -6px;
+      background: var(--green);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 50%;
+      width: 18px; height: 18px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── CATEGORIES BAR ── */
+    .cat-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+    }
+
+    .cat-bar::-webkit-scrollbar { display: none; }
+
+    .cat-pill {
+      white-space: nowrap;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--mid);
+      cursor: pointer;
+      border-bottom: 2.5px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .cat-pill:hover, .cat-pill.active {
+      color: var(--orange);
+      border-bottom-color: var(--orange);
+    }
+
+    /* ── FASHION DROPDOWN ── */
+    .cat-pill-wrapper {
+      position: relative;
+      display: inline-flex;
+      align-items: stretch;
+    }
+
+    .fashion-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(26,26,46,0.13);
+      min-width: 220px;
+      z-index: 300;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+
+    .cat-pill-wrapper:hover .fashion-dropdown,
+    .fashion-dropdown:hover {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .dropdown-header {
+      padding: 10px 16px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--mid);
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dropdown-section {
+      padding: 8px 0;
+    }
+
+    .dropdown-section-title {
+      padding: 6px 16px 4px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--orange);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .dropdown-item:hover {
+      background: var(--orange-pale);
+      color: var(--orange);
+    }
+
+    .dropdown-item-icon {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: var(--light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .dropdown-item:hover .dropdown-item-icon {
+      background: #FFE0C8;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 0;
+    }
+
+    .dropdown-footer {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--orange);
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.15s;
+    }
+
+    .dropdown-footer:hover { background: var(--orange-pale); }
+
+    /* ── HERO BANNER ── */
+    .hero {
+      background: linear-gradient(135deg, #FF6B00 0%, #FF4500 60%, #c73600 100%);
+      padding: 48px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: 30%;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+
+    .hero-text { position: relative; z-index: 1; }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .hero h1 {
+      font-family: 'Baloo 2', cursive;
+      font-size: 42px;
+      font-weight: 800;
+      color: white;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      color: rgba(255,255,255,0.85);
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      color: var(--orange);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 12px 28px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+
+    .hero-cta:hover { transform: translateY(-2px); }
+
+    .hero-badges {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .hero-tag {
+      background: rgba(255,255,255,0.15);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .hero-visual {
+      position: relative; z-index: 1;
+      background: rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 28px 32px;
+      text-align: center;
+      min-width: 200px;
+    }
+
+    .hero-visual .big-num {
+      font-family: 'Baloo 2', cursive;
+      font-size: 52px;
+      font-weight: 800;
+      color: white;
+      line-height: 1;
+    }
+
+    .hero-visual .big-label {
+      color: rgba(255,255,255,0.8);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    /* ── TRUST STRIP ── */
+    .trust-strip {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 14px 24px;
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--mid);
+    }
+
+    .trust-icon {
+      width: 28px; height: 28px;
+      background: var(--orange-pale);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      padding: 32px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title span {
+      font-size: 20px;
+    }
+
+    .see-all {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--orange);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* ── PRODUCT GRID ── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .product-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+      border-color: var(--orange);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 10px; left: 10px;
+      background: var(--orange);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      z-index: 1;
+    }
+
+    .product-badge.affiliate {
+      background: var(--green);
+    }
+
+    .product-img {
+      width: 100%;
+      aspect-ratio: 1;
+      background: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+    }
+
+    .product-info {
+      padding: 12px;
+    }
+
+    .product-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 4px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .product-source {
+      font-size: 11px;
+      color: var(--mid);
+      margin-bottom: 8px;
+    }
+
+    .product-source.deodap { color: var(--orange); }
+    .product-source.amazon { color: #E47911; }
+    .product-source.flipkart { color: #2874F0; }
+
+    .product-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .product-price {
+      font-family: 'Baloo 2', cursive;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .product-mrp {
+      font-size: 11px;
+      color: var(--mid);
+      text-decoration: line-through;
+    }
+
+    .product-discount {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .add-btn {
+      background: var(--orange);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    .add-btn:hover { background: var(--orange-light); }
+
+    .add-btn.affiliate-btn {
+      background: var(--green);
+    }
+
+    .add-btn.affiliate-btn:hover { background: #1d8f50; }
+
+    /* ── CATEGORY CARDS ── */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+    }
+
+    .cat-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cat-card:hover {
+      border-color: var(--orange);
+      transform: translateY(-3px);
+    }
+
+    .cat-emoji { font-size: 32px; margin-bottom: 8px; }
+
+    .cat-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    /* ── CART SIDEBAR ── */
+    .cart-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 200;
+    }
+
+    .cart-overlay.open { display: block; }
+
+    .cart-sidebar {
+      position: fixed;
+      top: 0; right: -400px;
+      width: 380px;
+      height: 100vh;
+      background: var(--white);
+      z-index: 201;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.3s ease;
+      box-shadow: -8px 0 32px rgba(0,0,0,0.12);
+    }
+
+    .cart-sidebar.open { right: 0; }
+
+    .cart-head {
+      padding: 20px;
+      border-bottom: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-head h2 {
+      font-family: 'Baloo 2', cursive;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .close-btn {
+      background: var(--light);
+      border: none;
+      border-radius: 8px;
+      width: 32px; height: 32px;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .cart-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--mid);
+    }
+
+    .cart-empty .empty-icon { font-size: 48px; margin-bottom: 12px; }
+
+    .cart-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cart-item-img {
+      width: 56px; height: 56px;
+      background: var(--light);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .cart-item-info { flex: 1; }
+
+    .cart-item-name {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .cart-item-price {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--orange);
+    }
+
+    .cart-qty {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .qty-btn {
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 26px; height: 26px;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+    }
+
+    .qty-num { font-size: 14px; font-weight: 700; min-width: 20px; text-align: center; }
+
+    .cart-footer {
+      padding: 16px 20px;
+      border-top: 1.5px solid var(--border);
+      background: var(--white);
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .cart-total-label { font-size: 14px; color: var(--mid); font-weight: 600; }
+    .cart-total-value { font-family: 'Baloo 2', cursive; font-size: 22px; font-weight: 800; color: var(--dark); }
+
+    .checkout-btn {
+      width: 100%;
+      background: var(--orange);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .checkout-btn:hover { background: var(--orange-light); }
+
+    .razorpay-note {
+      text-align: center;
+      font-size: 11px;
+      color: var(--mid);
+      margin-top: 8px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.7);
+      padding: 40px 32px 24px;
+      margin-top: 40px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 32px;
+      max-width: 1200px;
+      margin: 0 auto 32px;
+    }
+
+    .footer-col h4 {
+      font-family: 'Baloo 2', cursive;
+      color: white;
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      margin-bottom: 8px;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover { color: var(--orange); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 20px;
+      text-align: center;
+      font-size: 12px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--dark);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 999;
+      transition: transform 0.3s;
+      white-space: nowrap;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      nav { padding: 0 12px; }
+      .search-bar { max-width: none; margin: 0 8px; }
+      .nav-btn:not(.cart-btn) { display: none; }
+      .hero { padding: 28px 20px; flex-direction: column; }
+      .hero h1 { font-size: 28px; }
+      .hero-visual { display: none; }
+      .section { padding: 20px 12px; }
+      .cart-sidebar { width: 100%; right: -100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a class="logo" href="#">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6" stroke="white" stroke-width="2" fill="none"/><path d="M16 10a4 4 0 01-8 0" fill="none" stroke="white" stroke-width="2"/></svg>
+    </div>
+    ShopKart <span>India</span>
+  </a>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search products, brands, categories..." />
+    <button onclick="doSearch()">🔍</button>
+  </div>
+
+  <div class="nav-actions">
+    <button class="nav-btn">👤 Login</button>
+    <button class="nav-btn cart-btn" onclick="toggleCart()">
+      🛒 Cart
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- CATEGORIES BAR -->
+<div class="cat-bar">
+  <div class="cat-pill active" onclick="filterCat('all', this)">All Products</div>
+  <div class="cat-pill" onclick="filterCat('electronics', this)">Electronics</div>
+  <div class="cat-pill-wrapper">
+    <div class="cat-pill" id="fashionPill" onclick="filterCat('fashion', this)">Fashion ▾</div>
+    <div class="fashion-dropdown">
+      <div class="dropdown-header">Shop by Gender</div>
+      <div class="dropdown-section">
+        <div class="dropdown-section-title">👨 Men's</div>
+        <div class="dropdown-item" onclick="filterFashion('mens-tshirt', 'Mens T-Shirts')"><div class="dropdown-item-icon">👕</div>T-Shirts &amp; Shirts</div>
+        <div class="dropdown-item" onclick="filterFashion('mens-bottom', 'Mens Bottoms')"><div class="dropdown-item-icon">👖</div>Jeans &amp; Trousers</div>
+        <div class="dropdown-item" onclick="filterFashion('mens-shoes', 'Mens Footwear')"><div class="dropdown-item-icon">👟</div>Shoes &amp; Sneakers</div>
+        <div class="dropdown-item" onclick="filterFashion('mens-ethnic', 'Mens Ethnic Wear')"><div class="dropdown-item-icon">🧥</div>Kurta &amp; Ethnic</div>
+      </div>
+      <div class="dropdown-divider"></div>
+      <div class="dropdown-section">
+        <div class="dropdown-section-title">👩 Women's</div>
+        <div class="dropdown-item" onclick="filterFashion('womens-kurti', 'Womens Kurtas')"><div class="dropdown-item-icon">👘</div>Kurtas &amp; Suits</div>
+        <div class="dropdown-item" onclick="filterFashion('womens-saree', 'Womens Sarees')"><div class="dropdown-item-icon">🥻</div>Sarees</div>
+        <div class="dropdown-item" onclick="filterFashion('womens-western', 'Womens Western')"><div class="dropdown-item-icon">👗</div>Tops &amp; Dresses</div>
+        <div class="dropdown-item" onclick="filterFashion('womens-shoes', 'Womens Footwear')"><div class="dropdown-item-icon">👠</div>Heels &amp; Flats</div>
+      </div>
+      <div class="dropdown-footer" onclick="filterCat('fashion', document.getElementById('fashionPill'))">View All Fashion →</div>
+    </div>
+  </div>
+  <div class="cat-pill" onclick="filterCat('home', this)">Home & Kitchen</div>
+  <div class="cat-pill" onclick="filterCat('beauty', this)">Beauty</div>
+  <div class="cat-pill" onclick="filterCat('toys', this)">Toys & Kids</div>
+  <div class="cat-pill" onclick="filterCat('sports', this)">Sports</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-text">
+    <div class="hero-badge">🇮🇳 India ka Apna Store</div>
+    <h1>Best Deals,<br>Delivered Fast!</h1>
+    <p>Top products at lowest prices — from trusted sources across India.</p>
+    <a class="hero-cta" href="#products">Shop Now →</a>
+    <div class="hero-badges">
+      <div class="hero-tag">📦 Free Delivery</div>
+      <div class="hero-tag">✅ Verified Products</div>
+      <div class="hero-tag">🔄 Easy Returns</div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="big-num">500+</div>
+    <div class="big-label">Products Available</div>
+    <div style="margin-top:16px; border-top:1px solid rgba(255,255,255,0.2); padding-top:14px;">
+      <div class="big-num" style="font-size:32px;">10K+</div>
+      <div class="big-label">Happy Customers</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="trust-item"><div class="trust-icon">📦</div>Free Delivery on orders above ₹499</div>
+  <div class="trust-item"><div class="trust-icon">🔄</div>Easy 7-Day Returns</div>
+  <div class="trust-item"><div class="trust-icon">🔒</div>100% Secure Payments</div>
+  <div class="trust-item"><div class="trust-icon">⭐</div>Verified Seller Products</div>
+  <div class="trust-item"><div class="trust-icon">💬</div>24/7 WhatsApp Support</div>
+</div>
+
+<!-- CATEGORIES SECTION -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title"><span>🗂️</span> Shop by Category</div>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card" onclick="filterCat('electronics', document.querySelector('[onclick*=\"electronics\"]'))">
+      <div class="cat-emoji">📱</div>
+      <div class="cat-name">Electronics</div>
+    </div>
+    <div class="cat-card" onclick="filterCat('fashion', document.querySelector('[onclick*=\"fashion\"]'))">
+      <div class="cat-emoji">👗</div>
+      <div class="cat-name">Fashion</div>
+    </div>
+    <div class="cat-card" onclick="filterCat('home', document.querySelector('[onclick*=\"home\"]'))">
+      <div class="cat-emoji">🏠</div>
+      <div class="cat-name">Home & Kitchen</div>
+    </div>
+    <div class="cat-card" onclick="filterCat('beauty', document.querySelector('[onclick*=\"beauty\"]'))">
+      <div class="cat-emoji">💄</div>
+      <div class="cat-name">Beauty</div>
+    </div>
+    <div class="cat-card" onclick="filterCat('toys', document.querySelector('[onclick*=\"toys\"]'))">
+      <div class="cat-emoji">🧸</div>
+      <div class="cat-name">Toys & Kids</div>
+    </div>
+    <div class="cat-card" onclick="filterCat('sports', document.querySelector('[onclick*=\"sports\"]'))">
+      <div class="cat-emoji">⚽</div>
+      <div class="cat-name">Sports</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS SECTION -->
+<div class="section" id="products">
+  <div class="section-header">
+    <div class="section-title"><span>🔥</span> Trending Products</div>
+    <a class="see-all" href="#">See All</a>
+  </div>
+  <div class="product-grid" id="productGrid"></div>
+</div>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- CART SIDEBAR -->
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-head">
+    <h2>🛒 My Cart</h2>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">
+      <div class="empty-icon">🛒</div>
+      <div style="font-weight:700;margin-bottom:4px;">Your cart is empty!</div>
+      <div style="font-size:13px;">Add products to get started</div>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span class="cart-total-label">Total Amount</span>
+      <span class="cart-total-value" id="cartTotal">₹0</span>
+    </div>
+    <button class="checkout-btn" onclick="checkout()">Proceed to Checkout →</button>
+    <div class="razorpay-note">🔒 Secure payment via Razorpay</div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>ShopKart India</h4>
+      <p style="font-size:13px;margin-bottom:8px;">India ka apna online store. Best deals from trusted sellers, delivered to your door.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="#">Home</a>
+      <a href="#">All Products</a>
+      <a href="#">Deals of the Day</a>
+      <a href="#">New Arrivals</a>
+    </div>
+    <div class="footer-col">
+      <h4>Customer Care</h4>
+      <a href="#">Track My Order</a>
+      <a href="#">Return & Refund</a>
+      <a href="#">WhatsApp Us</a>
+      <a href="#">FAQ</a>
+    </div>
+    <div class="footer-col">
+      <h4>Policies</h4>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Shipping Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 ShopKart India. Made with ❤️ in India. Powered by Deodap + Amazon + Flipkart Affiliate.
+  </div>
+</footer>
+
+<script>
+  const products = [
+    { id:1, name:"Wireless Bluetooth Earbuds", emoji:"🎧", price:799, mrp:1999, discount:"60%", cat:"electronics", source:"deodap", type:"cart" },
+    { id:2, name:"Smart LED Bulb 9W Pack of 4", emoji:"💡", price:349, mrp:699, discount:"50%", cat:"home", source:"deodap", type:"cart" },
+    { id:3, name:"Men's Running Shoes", emoji:"👟", price:1299, mrp:2499, discount:"48%", cat:"fashion", fashionCat:"mens-shoes", source:"deodap", type:"cart" },
+    { id:13, name:"Men's Casual T-Shirt Pack of 3", emoji:"👕", price:599, mrp:1199, discount:"50%", cat:"fashion", fashionCat:"mens-tshirt", source:"deodap", type:"cart" },
+    { id:14, name:"Men's Slim Fit Jeans", emoji:"👖", price:999, mrp:1999, discount:"50%", cat:"fashion", fashionCat:"mens-bottom", source:"deodap", type:"cart" },
+    { id:15, name:"Men's Cotton Kurta", emoji:"🧥", price:699, mrp:1499, discount:"53%", cat:"fashion", fashionCat:"mens-ethnic", source:"deodap", type:"cart" },
+    { id:16, name:"Men's Formal Oxford Shoes", emoji:"👞", price:1199, mrp:2499, discount:"52%", cat:"fashion", fashionCat:"mens-shoes", source:"flipkart", type:"affiliate", link:"https://flipkart.com" },
+    { id:17, name:"Women's Floral Kurti", emoji:"👘", price:699, mrp:1499, discount:"53%", cat:"fashion", fashionCat:"womens-kurti", source:"deodap", type:"cart" },
+    { id:18, name:"Women's Banarasi Silk Saree", emoji:"🥻", price:1299, mrp:2999, discount:"57%", cat:"fashion", fashionCat:"womens-saree", source:"deodap", type:"cart" },
+    { id:19, name:"Women's Printed Maxi Dress", emoji:"👗", price:799, mrp:1599, discount:"50%", cat:"fashion", fashionCat:"womens-western", source:"deodap", type:"cart" },
+    { id:20, name:"Women's Block Heel Sandals", emoji:"👠", price:849, mrp:1799, discount:"53%", cat:"fashion", fashionCat:"womens-shoes", source:"amazon", type:"affiliate", link:"https://amazon.in" },
+    { id:21, name:"Women's Crop Top", emoji:"👚", price:449, mrp:899, discount:"50%", cat:"fashion", fashionCat:"womens-western", source:"deodap", type:"cart" },
+    { id:4, name:"Face Wash Vitamin C 100ml", emoji:"🧴", price:249, mrp:499, discount:"50%", cat:"beauty", source:"deodap", type:"cart" },
+    { id:5, name:"Samsung 65W Fast Charger", emoji:"🔌", price:1499, mrp:2299, discount:"35%", cat:"electronics", source:"amazon", type:"affiliate", link:"https://amazon.in" },
+    { id:6, name:"Lego Classic Creative Bricks", emoji:"🧩", price:2199, mrp:3299, discount:"33%", cat:"toys", source:"flipkart", type:"affiliate", link:"https://flipkart.com" },
+    { id:7, name:"Stainless Steel Water Bottle 1L", emoji:"🧃", price:399, mrp:799, discount:"50%", cat:"home", source:"deodap", type:"cart" },
+    { id:8, name:"Yoga Mat Anti-Slip 6mm", emoji:"🧘", price:599, mrp:1199, discount:"50%", cat:"sports", source:"deodap", type:"cart" },
+    { id:9, name:"Women's Floral Kurti (V2)", emoji:"👘", price:799, mrp:1599, discount:"50%", cat:"fashion", fashionCat:"womens-kurti", source:"deodap", type:"cart" },
+    { id:10, name:"boAt Rockerz 450 Headphones", emoji:"🎵", price:1499, mrp:3990, discount:"62%", cat:"electronics", source:"amazon", type:"affiliate", link:"https://amazon.in" },
+    { id:11, name:"Mixer Grinder 500W", emoji:"🥣", price:1899, mrp:3499, discount:"46%", cat:"home", source:"deodap", type:"cart" },
+    { id:12, name:"Cricket Bat Kashmir Willow", emoji:"🏏", price:899, mrp:1799, discount:"50%", cat:"sports", source:"deodap", type:"cart" },
+  ];
+
+  let cart = [];
+  let currentCat = 'all';
+
+  function renderProducts(cat = 'all') {
+    const grid = document.getElementById('productGrid');
+    const filtered = cat === 'all' ? products : products.filter(p => p.cat === cat);
+    grid.innerHTML = filtered.map(p => buildCard(p)).join('');
+  }
+
+  function filterFashion(subcat, label) {
+    currentCat = 'fashion';
+    document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+    document.getElementById('fashionPill').classList.add('active');
+    const grid = document.getElementById('productGrid');
+    const sectionTitle = document.querySelector('.section-title');
+    if (sectionTitle) sectionTitle.innerHTML = '<span>👗</span> ' + label;
+    const filtered = products.filter(p => p.fashionCat === subcat);
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mid);">😕 No products found in this category yet. <br><span style="font-size:13px;">More coming soon!</span></div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map(p => buildCard(p)).join('');
+    document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function buildCard(p) {
+    return `
+      <div class="product-card">
+        <div class="product-badge ${p.type === 'affiliate' ? 'affiliate' : ''}">${p.type === 'affiliate' ? '★ ' + (p.source === 'amazon' ? 'Amazon' : 'Flipkart') : '📦 Deodap'}</div>
+        <div class="product-img">${p.emoji}</div>
+        <div class="product-info">
+          <div class="product-name">${p.name}</div>
+          <div class="product-source ${p.source}">via ${p.source.charAt(0).toUpperCase() + p.source.slice(1)}</div>
+          <div class="product-price-row">
+            <div>
+              <div class="product-price">₹${p.price.toLocaleString()}</div>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <span class="product-mrp">₹${p.mrp.toLocaleString()}</span>
+                <span class="product-discount">${p.discount} off</span>
+              </div>
+            </div>
+            ${p.type === 'cart'
+              ? `<button class="add-btn" onclick="addToCart(${p.id})">+ Add</button>`
+              : `<button class="add-btn affiliate-btn" onclick="openAffiliate('${p.link}')">Buy ↗</button>`
+            }
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function filterCat(cat, el) {
+    currentCat = cat;
+    document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+    if (el && el.classList) el.classList.add('active');
+    const sectionTitle = document.querySelector('.section-title');
+    if (sectionTitle) sectionTitle.innerHTML = '<span>🔥</span> Trending Products';
+    renderProducts(cat);
+  }
+
+  function addToCart(id) {
+    const p = products.find(x => x.id === id);
+    const existing = cart.find(x => x.id === id);
+    if (existing) existing.qty++;
+    else cart.push({ ...p, qty: 1 });
+    updateCart();
+    showToast('✅ ' + p.name + ' added to cart!');
+  }
+
+  function openAffiliate(link) {
+    showToast('🔗 Opening partner store...');
+    setTimeout(() => window.open(link, '_blank'), 500);
+  }
+
+  function updateCart() {
+    const count = cart.reduce((a, b) => a + b.qty, 0);
+    document.getElementById('cartCount').textContent = count;
+    const total = cart.reduce((a, b) => a + b.price * b.qty, 0);
+    document.getElementById('cartTotal').textContent = '₹' + total.toLocaleString();
+
+    const itemsEl = document.getElementById('cartItems');
+    if (cart.length === 0) {
+      itemsEl.innerHTML = `<div class="cart-empty"><div class="empty-icon">🛒</div><div style="font-weight:700;margin-bottom:4px;">Your cart is empty!</div><div style="font-size:13px;">Add products to get started</div></div>`;
+      return;
+    }
+    itemsEl.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <div class="cart-item-img">${item.emoji}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">₹${(item.price * item.qty).toLocaleString()}</div>
+          <div class="cart-qty">
+            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function changeQty(id, delta) {
+    const idx = cart.findIndex(x => x.id === id);
+    if (idx === -1) return;
+    cart[idx].qty += delta;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    updateCart();
+  }
+
+  function toggleCart() {
+    document.getElementById('cartOverlay').classList.toggle('open');
+    document.getElementById('cartSidebar').classList.toggle('open');
+  }
+
+  function checkout() {
+    if (cart.length === 0) { showToast('❌ Your cart is empty!'); return; }
+    showToast('🚀 Redirecting to payment... (Razorpay coming soon!)');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  function doSearch() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    if (!q) { renderProducts(currentCat); return; }
+    const grid = document.getElementById('productGrid');
+    const filtered = products.filter(p => p.name.toLowerCase().includes(q));
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mid);">😕 No products found for "<strong>${q}</strong>"</div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map(p => buildCard(p)).join('');
+  }
+
+  document.getElementById('searchInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doSearch();
+  });
+
+  renderProducts();
+</script>
+</body>
+</html>
