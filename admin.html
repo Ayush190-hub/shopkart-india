@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ShopKart India — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--or:#FF6B00;--gr:#1BAB5E;--dk:#1A1A2E;--md:#4A4A6A;--lt:#F7F5FF;--wh:#FFFFFF;--bd:#E8E4F0;--grp:#E8F9F0;--orp:#FFF3E8;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--lt);color:var(--dk);}
+.lock{position:fixed;inset:0;background:var(--dk);display:flex;align-items:center;justify-content:center;z-index:999;}
+.lockbox{background:var(--wh);border-radius:16px;padding:32px;width:320px;text-align:center;}
+.lockbox h2{font-family:'Baloo 2',cursive;font-size:22px;color:var(--or);margin-bottom:6px;}
+.lockbox p{font-size:13px;color:var(--md);margin-bottom:20px;}
+.lockbox input{width:100%;border:1.5px solid var(--bd);border-radius:9px;padding:11px;font-size:16px;text-align:center;letter-spacing:4px;font-family:'Nunito',sans-serif;outline:none;margin-bottom:12px;}
+.lockbox input:focus{border-color:var(--or);}
+.lockbox button{width:100%;background:var(--or);color:white;border:none;border-radius:9px;padding:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+nav{background:var(--wh);border-bottom:1.5px solid var(--bd);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:var(--or);}
+.logo span{color:var(--dk);}
+.abadge{background:#FAEEDA;color:#633806;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:20px;max-width:1000px;margin:0 auto;}
+.stat{background:var(--wh);border:1.5px solid var(--bd);border-radius:12px;padding:16px;text-align:center;}
+.stat-num{font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;color:var(--dk);}
+.stat-lbl{font-size:12px;color:var(--md);margin-top:2px;}
+.main{max-width:1000px;margin:0 auto;padding:0 20px 40px;}
+.section-title{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.orders{display:flex;flex-direction:column;gap:10px;}
+.ocard{background:var(--wh);border:1.5px solid var(--bd);border-radius:12px;padding:16px;}
+.ocard.new{border-color:var(--or);background:#FFFAF7;}
+.ocard.processing{border-color:#3B82F6;}
+.ocard.shipped{border-color:var(--gr);}
+.ohd{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.oid{font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;}
+.ostatus{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700;}
+.s-new{background:#FFF3E8;color:#854F0B;}
+.s-proc{background:#EFF6FF;color:#1D4ED8;}
+.s-ship{background:var(--grp);color:#065F46;}
+.s-del{background:#F0FDF4;color:#166534;}
+.otime{font-size:12px;color:var(--md);margin-left:auto;}
+.odetails{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.od{background:var(--lt);border-radius:8px;padding:10px;}
+.odl{font-size:11px;color:var(--md);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+.odv{font-size:13px;font-weight:700;color:var(--dk);}
+.oactions{display:flex;gap:8px;flex-wrap:wrap;}
+.obtn{padding:8px 14px;border-radius:8px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:none;}
+.obtn-wa{background:#25D366;color:white;}
+.obtn-buy{background:var(--or);color:white;}
+.obtn-proc{background:#3B82F6;color:white;}
+.obtn-ship{background:var(--gr);color:white;}
+.obtn-del{background:var(--dk);color:white;}
+.empty{text-align:center;padding:60px 20px;color:var(--md);}
+.empty-icon{font-size:48px;margin-bottom:12px;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dk);color:white;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;transition:transform 0.3s;white-space:nowrap;}
+.toast.on{transform:translateX(-50%) translateY(0);}
+.wa-setup{background:var(--wh);border:1.5px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:20px;}
+.wa-setup h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.wa-setup input{width:100%;border:1.5px solid var(--bd);border-radius:8px;padding:9px 12px;font-family:'Nunito',sans-serif;font-size:14px;outline:none;margin-bottom:8px;}
+.wa-setup input:focus{border-color:var(--or);}
+.wa-setup button{background:var(--or);color:white;border:none;border-radius:8px;padding:9px 18px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+@media(max-width:600px){
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .odetails{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD LOCK -->
+<div class="lock" id="lock">
+  <div class="lockbox">
+    <h2>🔒 Admin Panel</h2>
+    <p>ShopKart India — Owner Access Only</p>
+    <input type="password" id="pinInput" placeholder="Enter PIN" onkeydown="if(event.key==='Enter')checkPin()"/>
+    <button onclick="checkPin()">Login →</button>
+    <div style="font-size:12px;color:var(--md);margin-top:10px;">Default PIN: 1234 (change it below after login)</div>
+  </div>
+</div>
+
+<nav>
+  <div class="logo">ShopKart <span>India</span> — Admin</div>
+  <span class="abadge">🔐 Owner Panel</span>
+</nav>
+
+<div style="max-width:1000px;margin:0 auto;padding:20px;">
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="s-total">0</div><div class="stat-lbl">Total Orders</div></div>
+    <div class="stat"><div class="stat-num" id="s-new" style="color:var(--or);">0</div><div class="stat-lbl">New Orders</div></div>
+    <div class="stat"><div class="stat-num" id="s-proc" style="color:#3B82F6;">0</div><div class="stat-lbl">Processing</div></div>
+    <div class="stat"><div class="stat-num" id="s-rev" style="color:var(--gr);">₹0</div><div class="stat-lbl">Total Revenue</div></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- WA SETUP -->
+  <div class="wa-setup">
+    <h3>💬 WhatsApp Notification Setup</h3>
+    <div style="font-size:13px;color:var(--md);margin-bottom:10px;">Enter your WhatsApp number to receive instant order notifications</div>
+    <input type="tel" id="waNum" placeholder="+91 99999 99999" value=""/>
+    <button onclick="saveWA()">Save Number</button>
+    <span id="waSaved" style="font-size:12px;color:var(--gr);margin-left:10px;display:none;">✓ Saved!</span>
+  </div>
+
+  <div class="section-title">📦 All Orders</div>
+  <div class="orders" id="ordersList">
+    <div class="empty">
+      <div class="empty-icon">📭</div>
+      <div style="font-weight:700;margin-bottom:4px;">No orders yet</div>
+      <div style="font-size:13px;">When customers order on ShopKart India, they'll appear here instantly</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PIN = localStorage.getItem('adminPin') || '1234';
+
+function checkPin() {
+  const val = document.getElementById('pinInput').value;
+  if (val === (localStorage.getItem('adminPin') || '1234')) {
+    document.getElementById('lock').style.display = 'none';
+    loadOrders();
+    loadWA();
+  } else {
+    document.getElementById('pinInput').style.borderColor = '#E24B4A';
+    showToast('❌ Wrong PIN!');
+  }
+}
+
+function saveWA() {
+  const num = document.getElementById('waNum').value.trim();
+  if (!num) { showToast('❌ Enter your number first!'); return; }
+  localStorage.setItem('waNum', num);
+  document.getElementById('waSaved').style.display = 'inline';
+  showToast('✅ WhatsApp number saved!');
+  setTimeout(() => document.getElementById('waSaved').style.display = 'none', 2000);
+}
+
+function loadWA() {
+  const num = localStorage.getItem('waNum');
+  if (num) document.getElementById('waNum').value = num;
+}
+
+function loadOrders() {
+  const orders = JSON.parse(localStorage.getItem('shopkartOrders') || '[]');
+  updateStats(orders);
+  if (!orders.length) return;
+
+  const html = orders.slice().reverse().map(o => `
+    <div class="ocard ${o.status === 'new' ? 'new' : o.status === 'processing' ? 'processing' : o.status === 'shipped' ? 'shipped' : ''}" id="oc-${o.id}">
+      <div class="ohd">
+        <div class="oid">#${o.id}</div>
+        <span class="ostatus s-${o.status === 'new' ? 'new' : o.status === 'processing' ? 'proc' : o.status === 'shipped' ? 'ship' : 'del'}">${o.status === 'new' ? '🆕 New Order' : o.status === 'processing' ? '⚙️ Processing' : o.status === 'shipped' ? '🚚 Shipped' : '✅ Delivered'}</span>
+        <div class="otime">${new Date(o.time).toLocaleString('en-IN')}</div>
+      </div>
+      <div class="odetails">
+        <div class="od"><div class="odl">Customer</div><div class="odv">${o.customer}</div></div>
+        <div class="od"><div class="odl">Phone</div><div class="odv">${o.phone}</div></div>
+        <div class="od"><div class="odl">Address</div><div class="odv">${o.address}</div></div>
+        <div class="od"><div class="odl">Total Paid</div><div class="odv" style="color:var(--or);">₹${o.total.toLocaleString()}</div></div>
+      </div>
+      <div style="background:var(--lt);border-radius:8px;padding:10px;margin-bottom:10px;font-size:13px;">
+        <div style="font-weight:700;margin-bottom:4px;">🛒 Products Ordered:</div>
+        ${o.items.map(i => `<div style="color:var(--md);">${i.e} ${i.name} × ${i.qty} — ₹${(i.price * i.qty).toLocaleString()}</div>`).join('')}
+      </div>
+      <div class="oactions">
+        <button class="obtn obtn-wa" onclick="notifyWA('${o.id}')">💬 Send to WhatsApp</button>
+        <button class="obtn obtn-buy" onclick="orderOnline('${o.id}')">🛒 Order on Amazon/Flipkart</button>
+        ${o.status === 'new' ? `<button class="obtn obtn-proc" onclick="updateStatus('${o.id}','processing')">⚙️ Mark Processing</button>` : ''}
+        ${o.status === 'processing' ? `<button class="obtn obtn-ship" onclick="updateStatus('${o.id}','shipped')">🚚 Mark Shipped</button>` : ''}
+        ${o.status === 'shipped' ? `<button class="obtn obtn-del" onclick="updateStatus('${o.id}','delivered')">✅ Mark Delivered</button>` : ''}
+      </div>
+    </div>`).join('');
+
+  document.getElementById('ordersList').innerHTML = html;
+}
+
+function updateStats(orders) {
+  document.getElementById('s-total').textContent = orders.length;
+  document.getElementById('s-new').textContent = orders.filter(o => o.status === 'new').length;
+  document.getElementById('s-proc').textContent = orders.filter(o => o.status === 'processing').length;
+  const rev = orders.reduce((a, b) => a + b.total, 0);
+  document.getElementById('s-rev').textContent = '₹' + rev.toLocaleString();
+}
+
+function updateStatus(id, status) {
+  const orders = JSON.parse(localStorage.getItem('shopkartOrders') || '[]');
+  const i = orders.findIndex(o => o.id === id);
+  if (i !== -1) { orders[i].status = status; localStorage.setItem('shopkartOrders', JSON.stringify(orders)); }
+  loadOrders();
+  showToast('✅ Status updated to ' + status + '!');
+}
+
+function notifyWA(id) {
+  const orders = JSON.parse(localStorage.getItem('shopkartOrders') || '[]');
+  const o = orders.find(x => x.id === id);
+  if (!o) return;
+  const msg = `🛒 *New Order — ShopKart India*\n\n*Order ID:* #${o.id}\n*Customer:* ${o.customer}\n*Phone:* ${o.phone}\n*Address:* ${o.address}\n\n*Products:*\n${o.items.map(i => `${i.e} ${i.name} × ${i.qty} = ₹${(i.price*i.qty).toLocaleString()}`).join('\n')}\n\n*Total Paid:* ₹${o.total.toLocaleString()}\n\n⚡ Please order from supplier now!`;
+  const waNum = localStorage.getItem('waNum') || '';
+  const numClean = waNum.replace(/[^0-9]/g, '');
+  window.open(`https://wa.me/${numClean}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function orderOnline(id) {
+  const orders = JSON.parse(localStorage.getItem('shopkartOrders') || '[]');
+  const o = orders.find(x => x.id === id);
+  if (!o) return;
+  const firstItem = o.items[0];
+  showToast('🔍 Searching for ' + firstItem.name + '...');
+  setTimeout(() => window.open(`https://www.amazon.in/s?k=${encodeURIComponent(firstItem.name)}`, '_blank'), 500);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('on');
+  setTimeout(() => t.classList.remove('on'), 2500);
+}
+
+// Auto refresh every 30 seconds
+setInterval(() => {
+  const orders = JSON.parse(localStorage.getItem('shopkartOrders') || '[]');
+  const newCount = orders.filter(o => o.status === 'new').length;
+  if (newCount > 0) document.title = `(${newCount} New!) ShopKart Admin`;
+  else document.title = 'ShopKart India — Admin Panel';
+}, 5000);
+</script>
+</body>
+</html>
