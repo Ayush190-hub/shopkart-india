@@ -608,11 +608,11 @@ const OWNER_WA = '919999999999';
 
 function mkCard(p){
   const imgHtml = p.img
-    ? `<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" onerror="this.style.display='none'">`
+    ? `<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:2;" onerror="this.remove()">`
     : '';
   return `<div class="pcard" onclick="openProd(${p.id})">
     <div class="pbadge">${p.src==='amazon'?'📦 Amazon':p.src==='flipkart'?'🛍️ Flipkart':'📦 Seller'}</div>
-    <div class="pimg" style="position:relative;">${imgHtml}<span style="z-index:1;position:relative;">${p.e}</span></div>
+    <div class="pimg" style="position:relative;">${imgHtml}<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:56px;z-index:1;">${p.e}</span></div>
     <div class="pinf">
       <div class="pname">${p.name}</div>
       <div class="psrc ${p.src}">via ${p.src==='amazon'?'Amazon':p.src==='flipkart'?'Flipkart':'Seller'}</div>
@@ -647,23 +647,51 @@ function filterCat(cat,el){
   document.getElementById('prods').scrollIntoView({behavior:'smooth'});
 }
 
+function setMainImg(src, thumbEl){
+  document.getElementById('pdMainImg').src = src;
+  document.querySelectorAll('#pdImgWrap div[onclick]').forEach(d => d.style.borderColor = 'var(--bd)');
+  thumbEl.style.borderColor = 'var(--or)';
+  window._pdImgIdx = window._pdImgs ? window._pdImgs.indexOf(src) : 0;
+}
+
+function slideImg(dir){
+  if(!window._pdImgs) return;
+  window._pdImgIdx = (window._pdImgIdx + dir + window._pdImgs.length) % window._pdImgs.length;
+  const src = window._pdImgs[window._pdImgIdx];
+  document.getElementById('pdMainImg').src = src;
+  const thumbs = document.querySelectorAll('#pdImgWrap div[onclick]');
+  thumbs.forEach((d,i) => d.style.borderColor = i === window._pdImgIdx ? 'var(--or)' : 'var(--bd)');
+}
+
 function openProd(id){
   const p = prods.find(x=>x.id===id);
   if(!p)return;
   curProd=p;
-  document.getElementById('pdEmoji').textContent=p.e;
   const wrap = document.getElementById('pdImgWrap');
-  if(p.imgs && p.imgs.length > 1){
-    wrap.style.flexDirection='column';
-    wrap.style.fontSize='0';
-    wrap.innerHTML=`
-      <img id="mainImg" src="${p.imgs[0]}" alt="${p.name}" style="width:100%;height:85%;object-fit:cover;" onerror="this.src=''">
-      <div style="display:flex;gap:6px;padding:6px;height:15%;overflow-x:auto;background:var(--lt);">
-        ${p.imgs.map((im,i)=>`<img src="${im}" onclick="document.getElementById('mainImg').src='${im}'" style="height:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid ${i===0?'var(--or)':'transparent'};flex-shrink:0;" onerror="this.style.display='none'">`).join('')}
+  const allImgs = p.imgs && p.imgs.length ? p.imgs : (p.img ? [p.img] : []);
+  if(allImgs.length > 1){
+    wrap.style.cssText = 'display:flex;flex-direction:row;gap:10px;align-items:flex-start;background:var(--wh);border-radius:18px;border:1.5px solid var(--bd);overflow:hidden;padding:10px;aspect-ratio:unset;font-size:0;';
+    wrap.innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:6px;width:72px;flex-shrink:0;">
+        ${allImgs.map((im,i)=>`
+          <div onclick="setMainImg('${im}',this)" style="width:68px;height:68px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid ${i===0?'var(--or)':'var(--bd)'};flex-shrink:0;background:var(--lt);">
+            <img src="${im}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.style.display='none'">
+          </div>`).join('')}
+      </div>
+      <div style="flex:1;aspect-ratio:1;border-radius:12px;overflow:hidden;background:var(--lt);position:relative;">
+        <img id="pdMainImg" src="${allImgs[0]}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src=''">
+        ${allImgs.length>1?`
+        <button onclick="slideImg(-1)" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);">‹</button>
+        <button onclick="slideImg(1)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);">›</button>`:''}
       </div>`;
-  } else if(p.img){
-    wrap.style.flexDirection='';
-    wrap.innerHTML=`<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.outerHTML='<span style=font-size:110px>${p.e}</span>"><span style="display:none">${p.e}</span>`;
+    window._pdImgs = allImgs;
+    window._pdImgIdx = 0;
+  } else if(allImgs.length === 1){
+    wrap.style.cssText = 'background:var(--wh);border-radius:18px;border:1.5px solid var(--bd);aspect-ratio:1;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:110px;';
+    wrap.innerHTML = `<img src="${allImgs[0]}" style="width:100%;height:100%;object-fit:cover;" onerror="this.outerHTML='<span style=font-size:110px>${p.e}</span>'">`;
+  } else {
+    wrap.style.cssText = 'background:var(--wh);border-radius:18px;border:1.5px solid var(--bd);aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:110px;';
+    wrap.innerHTML = `<span>${p.e}</span>`;
   }
   document.getElementById('pdName').textContent=p.name;
   document.getElementById('pdbc').textContent=p.name.length>28?p.name.slice(0,28)+'…':p.name;
