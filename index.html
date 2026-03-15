@@ -395,7 +395,7 @@ footer{background:var(--dk);color:rgba(255,255,255,.7);padding:36px 28px 22px;ma
   </div>
   <div class="pdw">
     <div class="pdg">
-      <div class="pdimg" id="pdImgWrap"><span id="pdEmoji">📦</span></div>
+      <div class="pdimg" id="pdImgWrap"></div>
       <div>
         <div class="pdsb amazon" id="pdSrc">via Amazon</div>
         <div class="pdname" id="pdName">Product</div>
@@ -608,11 +608,11 @@ const OWNER_WA = '919999999999';
 
 function mkCard(p){
   const imgHtml = p.img
-    ? `<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:2;" onerror="this.remove()">`
-    : '';
+    ? `<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:2;" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><span style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-size:56px;z-index:1;">${p.e}</span>`
+    : `<span style="font-size:56px;">${p.e}</span>`;
   return `<div class="pcard" onclick="openProd(${p.id})">
     <div class="pbadge">${p.src==='amazon'?'📦 Amazon':p.src==='flipkart'?'🛍️ Flipkart':'📦 Seller'}</div>
-    <div class="pimg" style="position:relative;">${imgHtml}<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:56px;z-index:1;">${p.e}</span></div>
+    <div class="pimg" style="position:relative;overflow:hidden;">${imgHtml}</div>
     <div class="pinf">
       <div class="pname">${p.name}</div>
       <div class="psrc ${p.src}">via ${p.src==='amazon'?'Amazon':p.src==='flipkart'?'Flipkart':'Seller'}</div>
@@ -670,19 +670,18 @@ function openProd(id){
   const wrap = document.getElementById('pdImgWrap');
   const allImgs = p.imgs && p.imgs.length ? p.imgs : (p.img ? [p.img] : []);
   if(allImgs.length > 1){
-    wrap.style.cssText = 'display:flex;flex-direction:row;gap:10px;align-items:flex-start;background:var(--wh);border-radius:18px;border:1.5px solid var(--bd);overflow:hidden;padding:10px;aspect-ratio:unset;font-size:0;';
+    wrap.style.cssText = 'display:flex;flex-direction:column;gap:10px;background:var(--wh);border-radius:18px;border:1.5px solid var(--bd);overflow:hidden;padding:12px;aspect-ratio:unset;';
     wrap.innerHTML = `
-      <div style="display:flex;flex-direction:column;gap:6px;width:72px;flex-shrink:0;">
-        ${allImgs.map((im,i)=>`
-          <div onclick="setMainImg('${im}',this)" style="width:68px;height:68px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid ${i===0?'var(--or)':'var(--bd)'};flex-shrink:0;background:var(--lt);">
-            <img src="${im}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.style.display='none'">
-          </div>`).join('')}
+      <div style="width:100%;aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--lt);position:relative;flex-shrink:0;">
+        <img id="pdMainImg" src="${allImgs[0]}" style="width:100%;height:100%;object-fit:contain;background:var(--wh);" onerror="this.style.opacity=0">
+        <button onclick="slideImg(-1)" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.95);border:0.5px solid var(--bd);border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">‹</button>
+        <button onclick="slideImg(1)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.95);border:0.5px solid var(--bd);border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">›</button>
       </div>
-      <div style="flex:1;aspect-ratio:1;border-radius:12px;overflow:hidden;background:var(--lt);position:relative;">
-        <img id="pdMainImg" src="${allImgs[0]}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src=''">
-        ${allImgs.length>1?`
-        <button onclick="slideImg(-1)" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);">‹</button>
-        <button onclick="slideImg(1)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);">›</button>`:''}
+      <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;">
+        ${allImgs.map((im,i)=>`
+          <div onclick="setMainImg('${im}',this)" style="width:64px;height:64px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid ${i===0?'var(--or)':'var(--bd)'};flex-shrink:0;background:var(--lt);">
+            <img src="${im}" style="width:100%;height:100%;object-fit:contain;background:var(--wh);" onerror="this.parentElement.style.display='none'">
+          </div>`).join('')}
       </div>`;
     window._pdImgs = allImgs;
     window._pdImgIdx = 0;
