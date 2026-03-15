@@ -592,6 +592,7 @@ const prods = [
   {id:23,name:"Strauss Adjustable Skipping Rope",e:"🪢",price:199,mrp:499,disc:"60%",cat:"sports",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/61YOCXJ7GlL._SX679_.jpg",desc:"Adjustable length skipping rope with foam handles. Great for cardio, weight loss and fitness. Suitable for all age groups.",feat:["Adjustable length","Foam grip handles","Anti-tangle wire","Good for cardio","All ages suitable"]},
   {id:24,name:"Kobo Cricket Batting Gloves",e:"🧤",price:399,mrp:899,disc:"56%",cat:"sports",src:"flipkart",type:"cart",img:"https://rukminim2.flixcart.com/image/416/416/xif0q/sport-glove/e/y/f/-original-imagz3gfhzfkhqrg.jpeg",desc:"Full finger batting gloves with Pittards leather palm. Good grip and protection. Available in sizes S, M, L. For right hand batsmen.",feat:["Pittards leather palm","Excellent grip","Full finger protection","Sizes S, M, L","Right hand batsmen"]},
   {id:25,name:"Aurion Running Shoes for Men",e:"👟",price:699,mrp:1999,disc:"65%",cat:"sports",src:"amazon",type:"cart",img:"https://m.media-amazon.com/images/I/71l4PW-d7kL._SX679_.jpg",desc:"Lightweight mesh running shoes. EVA cushioned sole for comfort. Anti-skid rubber outsole. Ideal for gym, running and casual wear.",feat:["Lightweight mesh upper","EVA cushioned sole","Anti-skid outsole","Sizes 6 to 11","Gym and running use"]},
+  {id:26,name:"Cute Panda Night Light for Kids",e:"🐼",price:349,mrp:599,disc:"42%",cat:"toys",src:"deodap",type:"cart",img:"https://i.ibb.co/PZ87FNb5/01-aefaa138-f4e0-41ef-80a0-62171b97017c.png",imgs:["https://i.ibb.co/PZ87FNb5/01-aefaa138-f4e0-41ef-80a0-62171b97017c.png","https://i.ibb.co/RkRhPRhq/02-d6411062-3d7b-45f2-82da-7038bec53505.png","https://i.ibb.co/v60LkfNv/09-78e485c0-2949-40f5-821d-dc2412b95168.png","https://i.ibb.co/qYt7SJYF/09-cf98d92d-7b1b-4f52-bdbe-b59efa76227e.png"],desc:"Adorable panda shaped LED night light perfect for kids bedroom. Soft silicone body glows in warm light. Touch sensor to turn on/off. USB rechargeable — no batteries needed. Perfect gifting option for children!",feat:["Soft silicone body — safe for kids","Touch sensor on/off","USB rechargeable — no batteries","Warm LED glow — no heat","Perfect birthday gift for kids"]},
 ];
 
 const revData = [
@@ -603,15 +604,15 @@ const revData = [
 let cart=[], curCat='all', curProd=null, curOrder=null;
 
 // YOUR WHATSAPP NUMBER — Change this to your actual number!
-const OWNER_WA = '918368273247';
+const OWNER_WA = '919999999999';
 
 function mkCard(p){
   const imgHtml = p.img
-    ? `<img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'">`
+    ? `<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" onerror="this.style.display='none'">`
     : '';
   return `<div class="pcard" onclick="openProd(${p.id})">
     <div class="pbadge">${p.src==='amazon'?'📦 Amazon':p.src==='flipkart'?'🛍️ Flipkart':'📦 Seller'}</div>
-    <div class="pimg">${imgHtml}<span style="z-index:1;position:relative;">${p.e}</span></div>
+    <div class="pimg" style="position:relative;">${imgHtml}<span style="z-index:1;position:relative;">${p.e}</span></div>
     <div class="pinf">
       <div class="pname">${p.name}</div>
       <div class="psrc ${p.src}">via ${p.src==='amazon'?'Amazon':p.src==='flipkart'?'Flipkart':'Seller'}</div>
@@ -652,7 +653,16 @@ function openProd(id){
   curProd=p;
   document.getElementById('pdEmoji').textContent=p.e;
   const wrap = document.getElementById('pdImgWrap');
-  if(p.img){
+  if(p.imgs && p.imgs.length > 1){
+    wrap.style.flexDirection='column';
+    wrap.style.fontSize='0';
+    wrap.innerHTML=`
+      <img id="mainImg" src="${p.imgs[0]}" alt="${p.name}" style="width:100%;height:85%;object-fit:cover;" onerror="this.src=''">
+      <div style="display:flex;gap:6px;padding:6px;height:15%;overflow-x:auto;background:var(--lt);">
+        ${p.imgs.map((im,i)=>`<img src="${im}" onclick="document.getElementById('mainImg').src='${im}'" style="height:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid ${i===0?'var(--or)':'transparent'};flex-shrink:0;" onerror="this.style.display='none'">`).join('')}
+      </div>`;
+  } else if(p.img){
+    wrap.style.flexDirection='';
     wrap.innerHTML=`<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.outerHTML='<span style=font-size:110px>${p.e}</span>"><span style="display:none">${p.e}</span>`;
   }
   document.getElementById('pdName').textContent=p.name;
