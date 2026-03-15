@@ -647,20 +647,36 @@ function filterCat(cat,el){
   document.getElementById('prods').scrollIntoView({behavior:'smooth'});
 }
 
-function setMainImg(src, thumbEl){
+function setMainImg(src, thumbEl, idx){
   document.getElementById('pdMainImg').src = src;
-  document.querySelectorAll('#pdImgWrap div[onclick]').forEach(d => d.style.borderColor = 'var(--bd)');
+  document.querySelectorAll('#pdImgWrap > div:last-child > div').forEach(d => d.style.borderColor = 'var(--bd)');
   thumbEl.style.borderColor = 'var(--or)';
-  window._pdImgIdx = window._pdImgs ? window._pdImgs.indexOf(src) : 0;
+  window._pdImgIdx = idx !== undefined ? idx : (window._pdImgs ? window._pdImgs.indexOf(src) : 0);
+  updateDots();
+}
+
+function slideImgTo(idx){
+  if(!window._pdImgs) return;
+  window._pdImgIdx = idx;
+  document.getElementById('pdMainImg').src = window._pdImgs[idx];
+  document.querySelectorAll('#pdImgWrap > div:last-child > div').forEach((d,i) => d.style.borderColor = i===idx ? 'var(--or)' : 'var(--bd)');
+  updateDots();
 }
 
 function slideImg(dir){
   if(!window._pdImgs) return;
   window._pdImgIdx = (window._pdImgIdx + dir + window._pdImgs.length) % window._pdImgs.length;
-  const src = window._pdImgs[window._pdImgIdx];
-  document.getElementById('pdMainImg').src = src;
-  const thumbs = document.querySelectorAll('#pdImgWrap div[onclick]');
-  thumbs.forEach((d,i) => d.style.borderColor = i === window._pdImgIdx ? 'var(--or)' : 'var(--bd)');
+  document.getElementById('pdMainImg').src = window._pdImgs[window._pdImgIdx];
+  document.querySelectorAll('#pdImgWrap > div:last-child > div').forEach((d,i) => d.style.borderColor = i===window._pdImgIdx ? 'var(--or)' : 'var(--bd)');
+  updateDots();
+}
+
+function updateDots(){
+  if(!window._pdImgs) return;
+  window._pdImgs.forEach((_,i) => {
+    const dot = document.getElementById('dot-'+i);
+    if(dot) dot.style.background = i===window._pdImgIdx ? 'var(--or)' : 'rgba(0,0,0,0.2)';
+  });
 }
 
 function openProd(id){
@@ -670,17 +686,20 @@ function openProd(id){
   const wrap = document.getElementById('pdImgWrap');
   const allImgs = p.imgs && p.imgs.length ? p.imgs : (p.img ? [p.img] : []);
   if(allImgs.length > 1){
-    wrap.style.cssText = 'display:flex;flex-direction:column;gap:10px;background:var(--wh);border-radius:18px;border:1.5px solid var(--bd);overflow:hidden;padding:12px;aspect-ratio:unset;';
+    wrap.style.cssText = 'display:flex;flex-direction:column;gap:10px;background:var(--wh);border-radius:18px;border:1.5px solid var(--bd);overflow:visible;padding:12px;aspect-ratio:unset;';
     wrap.innerHTML = `
-      <div style="width:100%;aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--lt);position:relative;flex-shrink:0;">
-        <img id="pdMainImg" src="${allImgs[0]}" style="width:100%;height:100%;object-fit:contain;background:var(--wh);" onerror="this.style.opacity=0">
-        <button onclick="slideImg(-1)" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.95);border:0.5px solid var(--bd);border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">‹</button>
-        <button onclick="slideImg(1)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.95);border:0.5px solid var(--bd);border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">›</button>
+      <div style="width:100%;aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--wh);position:relative;flex-shrink:0;border:1px solid var(--bd);">
+        <img id="pdMainImg" src="${allImgs[0]}" style="width:100%;height:100%;object-fit:contain;" onerror="this.style.opacity=0">
+        <button onclick="slideImg(-1)" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.95);border:1px solid var(--bd);border-radius:50%;width:36px;height:36px;font-size:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;">‹</button>
+        <button onclick="slideImg(1)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.95);border:1px solid var(--bd);border-radius:50%;width:36px;height:36px;font-size:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;">›</button>
+        <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5;">
+          ${allImgs.map((_,i)=>`<div id="dot-${i}" style="width:8px;height:8px;border-radius:50%;background:${i===0?'var(--or)':'rgba(0,0,0,0.2)'};cursor:pointer;" onclick="slideImgTo(${i})"></div>`).join('')}
+        </div>
       </div>
-      <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;">
+      <div style="display:flex;gap:8px;padding:4px 0;overflow-x:auto;">
         ${allImgs.map((im,i)=>`
-          <div onclick="setMainImg('${im}',this)" style="width:64px;height:64px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid ${i===0?'var(--or)':'var(--bd)'};flex-shrink:0;background:var(--lt);">
-            <img src="${im}" style="width:100%;height:100%;object-fit:contain;background:var(--wh);" onerror="this.parentElement.style.display='none'">
+          <div onclick="setMainImg('${im}',this,${i})" style="width:68px;height:68px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid ${i===0?'var(--or)':'var(--bd)'};flex-shrink:0;background:var(--wh);">
+            <img src="${im}" style="width:100%;height:100%;object-fit:contain;" onerror="this.parentElement.style.display='none'">
           </div>`).join('')}
       </div>`;
     window._pdImgs = allImgs;
